@@ -1,0 +1,42 @@
+name: Test & Lint CLI
+
+on:
+  push:
+    paths:
+      - cli/**
+    branches:
+      - master
+      - main
+      - develop
+      - cli
+  pull_request:
+    paths:
+      - cli/**
+    branches:
+      - master
+      - main
+      - develop
+      - cli
+
+jobs:
+  test_cli:
+    name: Run linter, build and test CLI
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Setup node
+        uses: actions/setup-node@v2
+        with:
+          node-version: "14"
+          cache: "yarn"
+
+      - name: Install dependencies
+        run: cd ./cli && yarn install --frozen-lockfile && cd ..
+
+      - name: Build CLI
+        run: yarn build
+
+      - name: Test CLI
+        run: yarn test
