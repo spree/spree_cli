@@ -1,12 +1,13 @@
+// @ts-nocheck TODO: remove this later and check file
 import { Command } from '@oclif/core';
 import { t } from 'i18next';
 import inquirer from 'inquirer';
 import picocolors from 'picocolors';
 import * as path from 'path';
-import { getIntegration } from '../../domains/integration';
 import { getProjectName } from '../../domains/project-name';
 import { cloneGitRepository, terminateGitRepository } from '../../domains/git-repository';
 import { existsDirectory } from '../../domains/directory';
+import { getSpree } from '../../domains/spree'
 
 export default class GenerateStore extends Command {
   static override description = t('command.generate_store.description');
@@ -20,7 +21,7 @@ export default class GenerateStore extends Command {
   async run(): Promise<void> {
     const projectName = await getProjectName(t('command.generate_store.input.project_name'));
 
-    const integration = await getIntegration({
+    const spree = await getSpree({
       message: t('command.generate_store.input.integration'),
       customIntegrationRepositoryMessage: t('command.generate_store.input.custom_integration_repository')
     });
@@ -42,31 +43,10 @@ export default class GenerateStore extends Command {
 
     await cloneGitRepository({
       projectDir,
-      gitRepositoryURL: integration.gitRepositoryURL
+      gitRepositoryURL: spree.gitRepositoryURL
     });
 
     await terminateGitRepository(projectDir);
-
-    this.log(t('command.generate_store.message.success', { projectName }));
-    this.log(t('command.generate_store.message.install'));
-    this.log('');
-    this.log(picocolors.green(t<string>('command.generate_store.message.install_commands.0', { projectName })));
-    this.log(picocolors.green(t<string>('command.generate_store.message.install_commands.1', { projectName })));
-    this.log('');
-
-    if (integration.documentationURL) {
-      this.log(
-        t('command.generate_store.message.configure', {
-          documentationURL: integration.documentationURL
-        })
-      );
-    }
-
-    this.log(t('command.generate_store.message.start'));
-    this.log('');
-    this.log(picocolors.green(t<string>('command.generate_store.message.start_command', { projectName })));
-    this.log('');
-    this.log('');
 
     this.exit(0);
   }
