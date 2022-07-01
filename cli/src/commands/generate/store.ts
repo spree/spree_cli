@@ -1,13 +1,11 @@
-// @ts-nocheck TODO: remove this later and check file
 import { Command } from '@oclif/core';
 import { t } from 'i18next';
 import inquirer from 'inquirer';
-import picocolors from 'picocolors';
 import * as path from 'path';
 import { getProjectName } from '../../domains/project-name';
 import { cloneGitRepository, terminateGitRepository } from '../../domains/git-repository';
 import { existsDirectory } from '../../domains/directory';
-import { getSpree } from '../../domains/spree'
+import { getSpree } from '../../domains/spree';
 
 export default class GenerateStore extends Command {
   static override description = t('command.generate_store.description');
@@ -22,7 +20,7 @@ export default class GenerateStore extends Command {
     const projectName = await getProjectName(t('command.generate_store.input.project_name'));
 
     const spree = await getSpree({
-      message: t('command.generate_store.input.spree'),
+      message: t('command.generate_store.input.spree')
     });
 
     const projectDir = path.resolve(projectName).concat('/backend');
