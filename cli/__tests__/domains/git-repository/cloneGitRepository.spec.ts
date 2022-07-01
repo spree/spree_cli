@@ -17,20 +17,20 @@ describe('cloneGitRepository | unit tests', () => {
   });
 
   it('clones git repository to the project directory', async () => {
-    const projectDir = '~/Projects/test-store';
+    const dir = '~/Projects/test-store';
 
     const gitRepositoryURL = 'https://github.com/vuestorefront/test-template.git';
 
     jest.spyOn(git, 'clone').mockResolvedValueOnce();
 
     await cloneGitRepository({
-      projectDir,
+      dir,
       gitRepositoryURL
     });
 
     expect(git.clone).toHaveBeenCalledWith(
       expect.objectContaining({
-        dir: projectDir,
+        dir: dir,
         url: gitRepositoryURL
       })
     );
@@ -56,7 +56,7 @@ describe('cloneGitRepository | unit tests', () => {
     });
 
     await cloneGitRepository({
-      projectDir: '~/Projects/test-store',
+      dir: '~/Projects/test-store',
       gitRepositoryURL: 'https://github.com/vuestorefront/test-template.git'
     });
 

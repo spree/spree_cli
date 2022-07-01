@@ -1,11 +1,15 @@
 import { Command } from '@oclif/core';
 import { t } from 'i18next';
-import inquirer from 'inquirer';
 import * as path from 'path';
 import { getProjectName } from '../../domains/project-name';
-import { cloneGitRepository, terminateGitRepository } from '../../domains/git-repository';
-import { existsDirectory } from '../../domains/directory';
+import {
+  cloneGitRepository,
+  terminateGitRepository
+} from '../../domains/git-repository';
+import { createDirectory } from '../../domains/directory';
 import { getSpree } from '../../domains/spree';
+import { getIntegration } from '../../domains/integration';
+import type { Module } from '../../domains/module';
 
 export default class GenerateStore extends Command {
   static override description = t('command.generate_store.description');
@@ -17,33 +21,54 @@ export default class GenerateStore extends Command {
   static override args = [];
 
   async run(): Promise<void> {
-    const projectName = await getProjectName(t('command.generate_store.input.project_name'));
+    const projectName = await getProjectName(
+      t('command.generate_store.input.project_name')
+    );
+    const projectDir = path.resolve(projectName);
 
     const spree = await getSpree({
       message: t('command.generate_store.input.spree')
     });
 
-    const projectDir = path.resolve(projectName).concat('/backend');
-
-    if (await existsDirectory(projectDir)) {
-      const { overwrite } = await inquirer.prompt<{ overwrite: boolean }>({
-        type: 'confirm',
-        name: 'overwrite',
-        message: () => t('command.generate_store.input.overwrite', { projectName })
-      });
-
-      if (!overwrite) {
-        this.log(t('command.generate_store.message.skipping'));
-        this.exit(0);
-      }
-    }
-
-    await cloneGitRepository({
-      projectDir,
-      gitRepositoryURL: spree.gitRepositoryURL
+    const integration = await getIntegration({
+      message: t('command.generate_store.input.integration'),
+      customIntegrationRepositoryMessage: t(
+        'command.generate_store.input.custom_integration_repository'
+      )
     });
 
-    await terminateGitRepository(projectDir);
+    const modules: Module[] = [
+      { template: spree, path: '/backend' },
+      { template: integration, path: '/integration' }
+    ].map((m) => ({ ...m, path: projectDir.concat(m.path) }));
+
+    const handleCreateDirectoryResponse = (success: boolean) => {
+      if (success) return;
+      this.log(t('command.generate_store.message.skipping'));
+      this.exit(0);
+    };
+
+    const fetchGitRepository = async (
+      dir: string,
+      gitRepositoryURL: string
+    ) => {
+      await cloneGitRepository({
+        dir,
+        gitRepositoryURL
+      });
+
+      await terminateGitRepository(projectDir);
+    };
+
+    await Promise.all(modules.map((m) => m.path).map(createDirectory)).then(
+      (responses) => responses.forEach(handleCreateDirectoryResponse)
+    );
+
+    await Promise.all(
+      modules
+        .map((m) => ({ dir: m.path, url: m.template.gitRepositoryURL }))
+        .map(({ dir, url }) => fetchGitRepository(dir, url))
+    );
 
     this.exit(0);
   }
