@@ -15,6 +15,7 @@ const integrations = [
   {
     "id": "808ce800-24b0-4228-aa61-966f399b3ea3",
     "name": "Spree (dockerized)",
+    "version": "docker",
     "gitRepositoryURL": "https://github.com/spree/spree_starter",
     "createdAt": "2022-02-23T04:55:48.881Z",
     "updatedAt": "2022-02-24T00:10:31.612Z",
@@ -23,6 +24,7 @@ const integrations = [
   {
     "id": "0a2083c5-4835-48fc-9143-212572fc66b9",
     "name": "Spree (no docker)",
+    "version": "no-docker",
     "gitRepositoryURL": "https://github.com/spree/spree_starter",
     "createdAt": "2022-02-23T04:57:08.922Z",
     "updatedAt": "2022-02-24T00:11:53.291Z",
