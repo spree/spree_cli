@@ -1,7 +1,7 @@
-type Spree = {
-  name: string;
+import type { Template } from '../module';
+
+type Spree = Template & {
   version: string;
-  gitRepositoryURL: string;
   documentationURL?: string;
 };
 

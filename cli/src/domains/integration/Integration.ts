@@ -1,6 +1,6 @@
-type Integration = {
-  name: string;
-  gitRepositoryURL: string;
+import type { Template } from '../module';
+
+type Integration = Template & {
   documentationURL?: string;
 };
 
