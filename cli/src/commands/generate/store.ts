@@ -22,11 +22,10 @@ export default class GenerateStore extends Command {
     const projectName = await getProjectName(t('command.generate_store.input.project_name'));
 
     const spree = await getSpree({
-      message: t('command.generate_store.input.integration'),
-      customIntegrationRepositoryMessage: t('command.generate_store.input.custom_integration_repository')
+      message: t('command.generate_store.input.spree'),
     });
 
-    const projectDir = path.resolve(projectName);
+    const projectDir = path.resolve(projectName).concat('/backend');
 
     if (await existsDirectory(projectDir)) {
       const { overwrite } = await inquirer.prompt<{ overwrite: boolean }>({

@@ -5,6 +5,7 @@
       "input": {
         "project_name": "Qual o nome do seu projeto?",
         "integration": "Escolha um template de integração:",
+        "spree": "Choose a spree template:",
         "custom_integration_repository": "Qual a URL do repositório git da integração customizada?",
         "overwrite": "\"./{{projectName}}\" já existe. Sobrescrever?"
       },
