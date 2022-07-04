@@ -1,7 +1,7 @@
 import type Integration from './Integration';
 import fetch from 'node-fetch';
 
-const API_URL = 'https://raw.githubusercontent.com/upsidelab/spree_starter/cli-data/integration/data.json';
+const API_URL = 'https://raw.githubusercontent.com/upsidelab/spree_starter/main/cli-data/integrations/data.json';
 
 const fetchIntegrations = async (): Promise<Integration[]> => {
   const response = await fetch(API_URL);

@@ -81,6 +81,8 @@ export default class GenerateStore extends Command {
         .map(getBuildScript)
     );
     // TODO: execute build scripts.
+    // TODO: remove the line below.
+    this.log(buildScripts.join('\n---\n'));
 
     this.exit(0);
   }
