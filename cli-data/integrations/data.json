@@ -1,0 +1,16 @@
+[
+  {
+    "id": "ceef98f2-fdc1-476d-8e7f-6368f10c707e",
+    "name": "Vue Storefront",
+    "gitRepositoryURL": "https://github.com/vuestorefront/spree",
+    "documentationURL": "https://docs.vuestorefront.io/spree",
+    "buildScriptURL": "https://raw.githubusercontent.com/upsidelab/spree_starter/main/cli-data/build-scripts/ceef98f2-fdc1-476d-8e7f-6368f10c707e"
+  },
+  {
+    "id": "76352e58-4a43-4af1-8f3e-88e90a79f6f1",
+    "name": "Next.js Commerce",
+    "gitRepositoryURL": "https://github.com/vercel/commerce",
+    "documentationURL": "https://user-docs.spreecommerce.org",
+    "buildScriptURL": "https://raw.githubusercontent.com/upsidelab/spree_starter/main/cli-data/build-scripts/76352e58-4a43-4af1-8f3e-88e90a79f6f1"
+  }
+]

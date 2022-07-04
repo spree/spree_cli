@@ -1,0 +1,18 @@
+[
+  {
+    "id": "c56e18ec-e14d-4fd9-a9a2-fb1dc4f436e5",
+    "name": "Spree (dockerized)",
+    "version": "docker",
+    "gitRepositoryURL": "https://github.com/spree/spree_starter",
+    "documentationURL": "https://dev-docs.spreecommerce.org/",
+    "buildScriptURL": "https://raw.githubusercontent.com/upsidelab/spree_starter/main/cli-data/build-scripts/c56e18ec-e14d-4fd9-a9a2-fb1dc4f436e5"
+  },
+  {
+    "id": "263d6436-6db5-4fab-a973-70ba7ae3c5d0",
+    "name": "Spree (no docker)",
+    "version": "no-docker",
+    "gitRepositoryURL": "https://github.com/spree/spree_starter",
+    "documentationURL": "https://dev-docs.spreecommerce.org/",
+    "buildScriptURL": "https://raw.githubusercontent.com/upsidelab/spree_starter/main/cli-data/build-scripts/263d6436-6db5-4fab-a973-70ba7ae3c5d0"
+  }
+]
