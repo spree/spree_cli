@@ -10,6 +10,8 @@ import { createDirectory } from '../../domains/directory';
 import { getSpree } from '../../domains/spree';
 import { getIntegration } from '../../domains/integration';
 import type { Module } from '../../domains/module';
+import { BuildScript, getBuildScript } from '../../domains/build';
+import { notEmpty } from '../../domains/typescript';
 
 export default class GenerateStore extends Command {
   static override description = t('command.generate_store.description');
@@ -48,7 +50,7 @@ export default class GenerateStore extends Command {
       this.exit(0);
     };
 
-    const fetchGitRepository = async (
+    const mountGitRepository = async (
       dir: string,
       gitRepositoryURL: string
     ) => {
@@ -65,10 +67,20 @@ export default class GenerateStore extends Command {
     );
 
     await Promise.all(
-      modules
-        .map((m) => ({ dir: m.path, url: m.template.gitRepositoryURL }))
-        .map(({ dir, url }) => fetchGitRepository(dir, url))
+      modules.map((m) =>
+        mountGitRepository(m.path, m.template.gitRepositoryURL)
+      )
     );
+
+    // TODO: remove this eslint disable flag, when execution added.
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const buildScripts = await Promise.all(
+      modules
+        .map((m) => m.template.buildScriptURL)
+        .filter(notEmpty<BuildScript>)
+        .map(getBuildScript)
+    );
+    // TODO: execute build scripts.
 
     this.exit(0);
   }
