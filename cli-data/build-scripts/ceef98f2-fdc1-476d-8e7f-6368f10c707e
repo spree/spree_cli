@@ -1,1 +1,6 @@
-echo TODO
+cd $SPREE_CLI_PROJECT_NAME
+cd $SPREE_CLI_PATH_INTEGRATION
+yarn install
+export BACKEND_URL=$SPREE_CLI_BACKEND_URL
+yarn build
+yarn dev
