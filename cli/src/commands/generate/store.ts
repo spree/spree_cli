@@ -12,6 +12,7 @@ import { getIntegration } from '../../domains/integration';
 import type { Module } from '../../domains/module';
 import { BuildScript, getBuildScript } from '../../domains/build';
 import { notEmpty } from '../../domains/typescript';
+import { useVariables } from '../../domains/variables';
 
 export default class GenerateStore extends Command {
   static override description = t('command.generate_store.description');
@@ -23,10 +24,14 @@ export default class GenerateStore extends Command {
   static override args = [];
 
   async run(): Promise<void> {
-    const projectName = await getProjectName(
-      t('command.generate_store.input.project_name')
-    );
-    const projectDir = path.resolve(projectName);
+    const variables = await (async () => {
+      const projectName = await getProjectName(
+        t('command.generate_store.input.project_name')
+      );
+      return useVariables({ projectName });
+    })();
+
+    const projectDir = path.resolve(variables.projectName);
 
     const spree = await getSpree({
       message: t('command.generate_store.input.spree')
@@ -40,8 +45,8 @@ export default class GenerateStore extends Command {
     });
 
     const modules: Module[] = [
-      { template: spree, path: '/backend' },
-      { template: integration, path: '/integration' }
+      { template: spree, path: variables.pathBackend },
+      { template: integration, path: variables.pathIntegration }
     ].map((m) => ({ ...m, path: projectDir.concat(m.path) }));
 
     const handleCreateDirectoryResponse = (success: boolean) => {
