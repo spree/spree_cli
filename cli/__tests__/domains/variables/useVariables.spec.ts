@@ -18,4 +18,10 @@ describe('useVariables | integration test', () => {
     useVariables({ projectName, pathIntegration });
     expect(process.env.SPREE_CLI_PATH_INTEGRATION).toEqual(pathIntegration);
   });
+  it('sets SPREE_CLI_BACKEND_URL variable', async () => {
+    const projectName = 'test';
+    const backendURL = '/test';
+    useVariables({ projectName, backendURL });
+    expect(process.env.SPREE_CLI_BACKEND_URL).toEqual(backendURL);
+  });
 });
