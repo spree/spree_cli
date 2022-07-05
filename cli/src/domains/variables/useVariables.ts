@@ -2,8 +2,8 @@ import type { Variables } from '.';
 import type { Diff } from '../typescript';
 
 const defaultVariables: Omit<Variables, 'projectName'> = {
-  pathBackend: '/backend',
-  pathIntegration: '/integration',
+  pathBackend: 'backend',
+  pathIntegration: 'integration',
   backendURL: 'http://localhost:4000'
 };
 

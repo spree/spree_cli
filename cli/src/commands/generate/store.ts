@@ -1,6 +1,8 @@
 import { Command } from '@oclif/core';
 import { t } from 'i18next';
 import * as path from 'path';
+import { spawn } from 'child_process';
+
 import { getProjectName } from '../../domains/project-name';
 import {
   cloneGitRepository,
@@ -10,9 +12,10 @@ import { createDirectory } from '../../domains/directory';
 import { getSpree } from '../../domains/spree';
 import { getIntegration } from '../../domains/integration';
 import type { Module } from '../../domains/module';
-import { BuildScript, getBuildScript } from '../../domains/build';
-import { notEmpty } from '../../domains/typescript';
+import { getBuildScript } from '../../domains/build';
 import { useVariables } from '../../domains/variables';
+import type Runner from '../../domains/module/Runner';
+import { notEmpty } from '../../domains/typescript';
 
 export default class GenerateStore extends Command {
   static override description = t('command.generate_store.description');
@@ -45,9 +48,17 @@ export default class GenerateStore extends Command {
     });
 
     const modules: Module[] = [
-      { template: spree, path: variables.pathBackend },
-      { template: integration, path: variables.pathIntegration }
-    ].map((m) => ({ ...m, path: projectDir.concat(m.path) }));
+      {
+        template: spree,
+        path: variables.pathBackend,
+        buildOptions: { encoding: 'utf-8', stdio: 'inherit', shell: true }
+      },
+      {
+        template: integration,
+        path: variables.pathIntegration,
+        buildOptions: { shell: true }
+      }
+    ].map((m) => ({ ...m, absolutePath: `${projectDir}/${m.path}` }));
 
     const handleCreateDirectoryResponse = (success: boolean) => {
       if (success) return;
@@ -67,28 +78,41 @@ export default class GenerateStore extends Command {
       await terminateGitRepository(projectDir);
     };
 
-    await Promise.all(modules.map((m) => m.path).map(createDirectory)).then(
+    await Promise.all(modules.map((m) => m.absolutePath).map(createDirectory)).then(
       (responses) => responses.forEach(handleCreateDirectoryResponse)
     );
 
     await Promise.all(
       modules.map((m) =>
-        mountGitRepository(m.path, m.template.gitRepositoryURL)
+        mountGitRepository(m.absolutePath, m.template.gitRepositoryURL)
       )
     );
 
-    // TODO: remove this eslint disable flag, when execution added.
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const buildScripts = await Promise.all(
       modules
         .map((m) => m.template.buildScriptURL)
-        .filter(notEmpty<BuildScript>)
-        .map(getBuildScript)
+        .map((url) => url && getBuildScript(url))
     );
-    // TODO: execute build scripts.
-    // TODO: remove the line below.
-    this.log(buildScripts.join('\n---\n'));
 
-    this.exit(0);
+    const runnersMap = modules.reduce(
+      (res, m, i) => ({
+        ...res,
+        [m.path]: {
+          name: m.template.name,
+          buildOptions: m.buildOptions,
+          buildScript: buildScripts[i]
+        }
+      }),
+      {} as Record<string, Runner>
+    );
+
+    const executeRunner = ({ buildScript, buildOptions }: Runner) => {
+      if (buildScript) spawn(buildScript, buildOptions);
+    };
+
+    [variables.pathBackend, variables.pathIntegration]
+      .map((path) => runnersMap[path])
+      .filter(notEmpty<Runner>)
+      .forEach((runner) => executeRunner(runner));
   }
 }
