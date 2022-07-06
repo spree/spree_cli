@@ -1,22 +1,25 @@
 {
   "command": {
     "generate_store": {
-      "description": "Generates a Vue Storefront store.",
+      "description": "Generates a Spree starter with integration and backend modules.",
       "input": {
         "project_name": "What's your project name?",
         "integration": "Choose an integration template:",
         "spree": "Choose a spree template:",
         "custom_integration_repository": "What's the URL of the custom integration's git repository?",
-        "overwrite": "\"./{{projectName}}\" already exists. Overwrite?"
+        "overwrite": "\"./{{ dir }}\" already exists. Overwrite?"
       },
       "message": {
-        "skipping": "Can't generate the store. Skipping…",
-        "success": "Sucessfully generated your store at \"./{{projectName}}\"!",
-        "install": "To finish the installation, run the following commands:",
-        "install_commands": ["cd {{ projectName }}", "npm install"],
-        "configure": "Then, go to the {{ documentationURL }} to learn how to configure the project.",
+        "skipping": "Skipping process of generating the \"{{ name }}\"...",
+        "success": "Sucessfully generated your Spree starter at \"./{{ projectName }}\"!",
+        "configure": "Visit {{ documentationURL }} to learn how to configure the \"{{ name }}\".",
         "start": "Once finished, you can start the project using this command:",
-        "start_command": "npm run dev"
+        "start_command": "npm run dev",
+        "build_scripts_skipping": "No build script provided for \"{{ name }}\". Skipping...",
+        "build_scripts": "Getting the build scripts ready",
+        "build_scripts_fetching": "Downloading \"{{ name }}\" build script",
+        "build_scripts_fetching_done": "Build script for \"{{ name }}\" downloaded!",
+        "done": "done"
       }
     },
     "generate_template": {
@@ -29,13 +32,13 @@
         "integration_path": "What's the path to the integration theme?"
       },
       "message": {
-        "success": "Sucessfully created your template at \"./{{projectName}}\"!"
+        "success": "Sucessfully created your template at \"./{{ projectName }}\"!"
       }
     }
   },
   "domain": {
     "directory": {
-      "was_not_found": "The directory \"{{directory}}\" was not found."
+      "was_not_found": "The directory \"{{ directory }}\" was not found."
     },
     "project_name": {
       "is_empty": "Please input a project name.",
@@ -44,7 +47,7 @@
     "git_repository_url": {
       "is_invalid": "Please input a valid git repository URL.",
       "was_not_found": "Couldn't locate git repository with the received URL.",
-      "suggestion": "The protocol isn't supported. Use \"{{suggestion}}\" instead?"
+      "suggestion": "The protocol isn't supported. Use \"{{ suggestion }}\" instead?"
     }
   }
 }

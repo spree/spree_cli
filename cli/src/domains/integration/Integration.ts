@@ -1,7 +1,5 @@
 import type { Template } from '../module';
 
-type Integration = Template & {
-  documentationURL?: string;
-};
+type Integration = Template;
 
 export default Integration;
