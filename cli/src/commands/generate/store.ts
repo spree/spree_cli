@@ -47,7 +47,7 @@ export default class GenerateStore extends Command {
       )
     });
 
-    const modules: Module[] = [
+    const modules: Module[] = integration ? [
       {
         template: spree,
         path: variables.pathBackend,
@@ -57,6 +57,12 @@ export default class GenerateStore extends Command {
         template: integration,
         path: variables.pathIntegration,
         buildOptions: { shell: true }
+      }
+    ].map((m) => ({ ...m, absolutePath: `${projectDir}/${m.path}` })) : [
+      {
+        template: spree,
+        path: variables.pathBackend,
+        buildOptions: { encoding: 'utf-8', stdio: 'inherit', shell: true }
       }
     ].map((m) => ({ ...m, absolutePath: `${projectDir}/${m.path}` }));
 
@@ -87,7 +93,6 @@ export default class GenerateStore extends Command {
         mountGitRepository(m.absolutePath, m.template.gitRepositoryURL)
       )
     );
-
     const buildScripts = await Promise.all(
       modules
         .map((m) => m.template.buildScriptURL)

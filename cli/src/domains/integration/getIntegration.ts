@@ -19,7 +19,7 @@ type Options = {
 };
 
 /** Gets the integration from user's input. */
-const getIntegration = async (options: Options): Promise<Integration> => {
+const getIntegration = async (options: Options): Promise<Integration|null> => {
   const { message, customIntegrationRepositoryMessage } = options;
 
   const integrations = await fetchIntegrations();
@@ -28,8 +28,12 @@ const getIntegration = async (options: Options): Promise<Integration> => {
     name: 'Custom integration',
     gitRepositoryURL: null
   };
+  const legacyIntegration: CustomIntegration = {
+    name: 'Legacy integration',
+    gitRepositoryURL: null
+  };
 
-  const choices = [...integrations, customIntegration].map((integration) => ({
+  const choices = [...integrations, legacyIntegration, customIntegration].map((integration) => ({
     name: integration.name,
     value: integration
   }));
@@ -42,6 +46,7 @@ const getIntegration = async (options: Options): Promise<Integration> => {
   });
 
   if (answers.integration.gitRepositoryURL) return answers.integration;
+  if (answers.integration.name === 'Legacy integration') return null;
 
   return {
     ...answers.integration,
