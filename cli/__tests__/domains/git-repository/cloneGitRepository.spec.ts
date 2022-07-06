@@ -60,7 +60,7 @@ describe('cloneGitRepository | unit tests', () => {
       gitRepositoryURL: 'https://github.com/vuestorefront/test-template.git'
     });
 
-    expect(output).toContain('░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ || 0%');
-    expect(output).toContain('████████████████████████████████████████ || 100%');
+    expect(output).toContain('Cloning https://github.com/vuestorefront/test-template.git | ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ | 0%');
+    expect(output).toContain('Cloning https://github.com/vuestorefront/test-template.git | ████████████████████████████████████████ | 100%');
   });
 });

@@ -14,7 +14,7 @@ const cloneGitRepository = async (options: Options): Promise<void> => {
 
   const bar = CliUx.ux.progress({
     fps: 64,
-    format: '{bar} || {percentage}%',
+    format: `Cloning ${options.gitRepositoryURL} | {bar} | {percentage}%`,
     barCompleteChar: '\u2588',
     barIncompleteChar: '\u2591'
   });
