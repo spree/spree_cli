@@ -17,6 +17,7 @@ import { BuildScript, getBuildScript } from '../../domains/build';
 import { useVariables } from '../../domains/variables';
 import type Runner from '../../domains/module/Runner';
 import { notEmpty } from '../../domains/typescript';
+
 export default class GenerateStore extends Command {
   static override description = t('command.generate_store.description');
 
@@ -41,7 +42,7 @@ export default class GenerateStore extends Command {
       customIntegrationRepositoryMessage: t('command.generate_store.input.custom_integration_repository')
     });
 
-    const modules: Module[] = integration ? [
+    const modules: Module[] = [
       {
         template: spree,
         path: variables.pathBackend,
@@ -52,25 +53,27 @@ export default class GenerateStore extends Command {
         path: variables.pathIntegration,
         buildOptions: { shell: true }
       }
-    ].map((m) => ({ ...m, absolutePath: `${projectDir}/${m.path}` })) : [
-      {
-        template: spree,
-        path: variables.pathBackend,
-        buildOptions: { encoding: 'utf-8', stdio: 'inherit', shell: true }
-      }
     ].map((m) => ({ ...m, absolutePath: `${projectDir}/${m.path}` }));
 
-    const mountModule = async (m: Module) => {
-      await cloneGitRepository({ dir: m.absolutePath, gitRepositoryURL: m.template.gitRepositoryURL });
+    const mountGitRepository = async (dir: string, gitRepositoryURL: string) => {
+      await cloneGitRepository({ dir, gitRepositoryURL });
       await terminateGitRepository(projectDir);
     };
 
-    for (const module of modules) {
-      const shouldCreateDirectory = await createDirectory(module.absolutePath);
-      if (shouldCreateDirectory) {
-        await mountModule(module);
+    const repositoriesToMount: { name: string, fn?: () => Promise<void> }[] = [];
+
+    for (const { absolutePath, template: { gitRepositoryURL, name }} of modules) {
+      if (!gitRepositoryURL) continue;
+      const shouldCreateDirectory = await createDirectory(absolutePath);
+      const fn = shouldCreateDirectory ? (async () => await mountGitRepository(absolutePath, gitRepositoryURL)) : undefined;
+      repositoriesToMount.push({ name, fn });
+    }
+
+    for (const {name, fn} of repositoriesToMount) {
+      if (fn) {
+        await fn();
       } else {
-        this.log(t('command.generate_store.message.skipping', { name: module.template.name }));
+        this.log(t('command.generate_store.message.skipping', { name }));
       }
     }
 

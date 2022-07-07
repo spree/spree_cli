@@ -3,9 +3,13 @@ import type Integration from './Integration';
 import fetchIntegrations from './fetchIntegrations';
 import { getGitRepositoryURL } from '../git-repository-url';
 
-type CustomIntegration = {
-  name: string;
-  gitRepositoryURL: null;
+type CustomIntegration = Omit<Partial<Integration>, 'name'> & {
+  name: Integration['name'];
+  buildIntegration: (integration: CustomIntegration) => Promise<Integration>;
+};
+
+const isCustomIntegration = (integration: Integration | CustomIntegration): integration is CustomIntegration => {
+  return (<CustomIntegration>integration).buildIntegration !== undefined;
 };
 
 /** The answers expected in the form of 'inquirer'. */
@@ -19,39 +23,40 @@ type Options = {
 };
 
 /** Gets the integration from user's input. */
-const getIntegration = async (options: Options): Promise<Integration|null> => {
+const getIntegration = async (options: Options): Promise<Integration> => {
   const { message, customIntegrationRepositoryMessage } = options;
 
   const integrations = await fetchIntegrations();
 
-  const customIntegration: CustomIntegration = {
-    name: 'Custom integration',
-    gitRepositoryURL: null
-  };
-  const legacyIntegration: CustomIntegration = {
-    name: 'Legacy integration',
-    gitRepositoryURL: null
-  };
+  const customIntegrations: CustomIntegration[] = [
+    {
+      name: 'Custom integration',
+      buildIntegration: async (customIntegration) => ({
+        ...customIntegration,
+        gitRepositoryURL: await getGitRepositoryURL(customIntegrationRepositoryMessage)
+      })
+    },
+    {
+      name: 'Legacy integration',
+      buildIntegration: async ({ name }) => ({ name } as Integration)
+    }
+  ];
 
-  const choices = [...integrations, legacyIntegration, customIntegration].map((integration) => ({
+  const choices = [...integrations, ...customIntegrations].map((integration) => ({
     name: integration.name,
     value: integration
   }));
 
-  const answers = await inquirer.prompt<Answers>({
+  const { integration } = await inquirer.prompt<Answers>({
     choices,
     message,
     type: 'list',
     name: 'integration'
   });
 
-  if (answers.integration.gitRepositoryURL) return answers.integration;
-  if (answers.integration.name === 'Legacy integration') return null;
-
-  return {
-    ...answers.integration,
-    gitRepositoryURL: await getGitRepositoryURL(customIntegrationRepositoryMessage)
-  };
+  return isCustomIntegration(integration)
+    ? integration.buildIntegration(integration)
+    : integration;
 };
 
 export default getIntegration;
