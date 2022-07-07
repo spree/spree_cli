@@ -1,9 +1,9 @@
 # Spree + Frontend CLI
 
-## Prerequisites
-All you need to use Spree + Frontend CLI is:
+## Getting started
+To use the CLI you need:
 * Node 14+
-* Requirements listed below based on chosen version 
+* Requirements listed below, based on selected template
 
 ## Local Installation
 
@@ -36,7 +36,7 @@ yarn build
 
 This will automatically launch the application at `http://localhost:4000/admin`
 
-Chosen storefront integration will be accessible under `http://localhost:3000`
+Selected storefront integration will be accessible under `http://localhost:3000`
 
 ### Without Docker (not recommended for beginners)
 
@@ -80,7 +80,7 @@ yarn build
 
 This will automatically launch the application at `http://localhost:4000/admin`
 
-Chosen storefront integration will be accessible under `http://localhost:3000`
+Selected storefront integration will be accessible under `http://localhost:3000`
 
 ## Overview
 
