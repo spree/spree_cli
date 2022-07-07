@@ -1,5 +1,10 @@
 # Spree + Frontend CLI
 
+## Prerequisites
+All you need to use Spree + Frontend CLI is:
+* Node 14+
+* Requirements listed below based on chosen version 
+
 ## Local Installation
 
 ### Using Docker (Recommended)
