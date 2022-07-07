@@ -1,6 +1,6 @@
 export interface Template {
   name: string;
-  gitRepositoryURL: string;
+  gitRepositoryURL?: string;
   documentationURL?: string;
   buildScriptURL?: string;
 }
