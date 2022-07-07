@@ -1,10 +1,12 @@
-import type Integration from './Integration';
 import fetch from 'node-fetch';
 
-const API_URL = 'https://raw.githubusercontent.com/upsidelab/spree_starter/main/cli-data/integrations/data.json';
+import type { Integration } from '.';
+import { API_URL } from '../constants';
+
+const URL = `${API_URL}/integrations/data.json`;
 
 const fetchIntegrations = async (): Promise<Integration[]> => {
-  const response = await fetch(API_URL);
+  const response = await fetch(URL);
   return response.json() as Promise<Integration[]>;
 };
 

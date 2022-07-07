@@ -1,10 +1,12 @@
 import fetch from 'node-fetch';
-import type { Spree } from '.';
 
-const API_URL = 'https://raw.githubusercontent.com/upsidelab/spree_starter/main/cli-data/spree/data.json';
+import type { Spree } from '.';
+import { API_URL } from '../constants';
+
+const URL = `${API_URL}/spree/data.json`;
 
 const fetchSpreeTemplates = async (): Promise<Spree[]> => {
-  const response = await fetch(API_URL);
+  const response = await fetch(URL);
   return response.json() as Promise<Spree[]>;
 };
 
