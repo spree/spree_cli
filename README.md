@@ -1,4 +1,6 @@
-# Spree + Frontend CLI
+# Spree CLI
+
+Spree's CLI that allows for setting up the store with selected backend template and front-end integration.
 
 ## Getting started
 To use the CLI you need:
