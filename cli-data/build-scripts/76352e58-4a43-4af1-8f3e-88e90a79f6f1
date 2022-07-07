@@ -1,1 +1,6 @@
-echo TODO
+cd $SPREE_CLI_PROJECT_NAME
+cd $SPREE_CLI_PATH_INTEGRATION
+cp packages/spree/.env.template site/.env.local
+yarn install
+npm run dev
+npm run dev
