@@ -1,5 +1,7 @@
 import type { Template } from '../module';
 
-type Integration = Template;
+type Integration = Template & {
+    preSpreeBuildScript?: string;
+};
 
 export default Integration;
