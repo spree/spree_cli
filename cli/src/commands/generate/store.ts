@@ -91,7 +91,7 @@ export default class GenerateStore extends Command {
     const fetchBuildScript = async ({ template: { buildScriptURL: url }}: Module): Promise<BuildScript | undefined> => {
       if (!notEmpty<string>(url)) return;
       const buildScript = await getBuildScript(url);
-      return buildScript;
+      return (integration.inlineScript || '').concat(buildScript);
     };
     CliUx.ux.action.start(t('command.generate_store.message.build_scripts'));
     const buildScripts = await Promise.all(modules.map(fetchBuildScript));
