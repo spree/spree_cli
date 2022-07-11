@@ -40,7 +40,7 @@ const getIntegration = async (options: Options): Promise<Integration> => {
       name: 'Legacy integration',
       buildIntegration: async ({ name }) => ({
         name,
-        inlineScript: 'echo "gem \'spree_frontend\'" >> $SPREE_CLI_PROJECT_NAME/$SPREE_CLI_PATH_BACKEND/Gemfile\n'
+        preSpreeBuildScript: 'echo "gem \'spree_frontend\'" >> $SPREE_CLI_PROJECT_NAME/$SPREE_CLI_PATH_BACKEND/Gemfile\n'
       } as Integration)
     }
   ];
