@@ -1,0 +1,14 @@
+{
+  "dependencies": {
+    "@spree/dashboard": "^0.1.0",
+    "esbuild": "^0.14.1"
+  },
+  "scripts": {
+    "build": "cd cli && yarn run build",
+    "lint": "cd cli && yarn run lint",
+    "test": "cd ./cli && yarn test --passWithNoTests"
+  },
+  "devDependencies": {
+    "ts-jest": "^28.0.5"
+  }
+}
