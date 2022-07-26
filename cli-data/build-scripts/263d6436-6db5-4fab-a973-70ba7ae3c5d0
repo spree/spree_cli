@@ -1,3 +1,0 @@
-cd $SPREE_CLI_PROJECT_NAME
-cd $SPREE_CLI_PATH_BACKEND
-bin/setup-no-docker

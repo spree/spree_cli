@@ -18,7 +18,7 @@ Backend:
 Frontend:
    
 1. VueStorefront:
-   * Node 14.15+
+   * Node 14.15.x - 14.19.x
 
 2. NextJs Storefront:
    * Node
@@ -27,13 +27,14 @@ Frontend:
 #### 2. Before running script
 Build your CLI using:
 ```bash
+yarn install
 yarn build
 ```
 
 #### 3. Run setup script
 
 ```bash
-.bin/run generate store
+./bin/run generate store
 ```
 
 This will automatically launch the application at `http://localhost:4000/admin`
@@ -47,10 +48,10 @@ Backend:
 * HomeBrew - https://brew.sh/
 * Install required packages
 
-      ```bash
+
       brew install gpg postgresql redis imagemagick
       createuser -P -d postgres
-      ```
+
 
 * RVM - https://rvm.io/
 * NVM - https://github.com/nvm-sh/nvm
@@ -61,7 +62,7 @@ Backend:
 Frontend:
 
 1. VueStorefront:
-   * Node 14.15+
+    * Node 14.15.x - 14.19.x
 
 2. NextJs Storefront:
    * Node
@@ -71,6 +72,7 @@ Frontend:
 Build your CLI using:
 
 ```bash
+yarn install
 yarn build
 ```
 
