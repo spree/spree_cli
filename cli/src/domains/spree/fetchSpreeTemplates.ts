@@ -1,7 +1,7 @@
 import fetch from 'node-fetch';
 
-import type {Spree} from '.';
-import {API_URL} from '../constants';
+import type { Spree } from '.';
+import { API_URL } from '../constants';
 
 const URL = `${API_URL}/spree/data.json`;
 
