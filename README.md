@@ -8,14 +8,8 @@ To use the CLI you need:
 * Requirements listed below, based on selected template
 
 ### Using NextJS Storefront
-Using NextJS Storefront is not recommended.
-Sometimes it may not start the Storefront properly and therefore user will need to restart the process or launch Next server manually.
-To do so you need to move to `/integration` folder and type `yarn dev` into console.
-
-In case if the server is randomly stopping during launch it is advised to stop it (for example with `ctrl + c`) and repeat steps mentioned above.
-You can also refer to NextJs docs: https://github.com/vercel/commerce
-
-
+Using NextJS Storefront may be problematic - sometimes NextJS server is not launched properly or it stops during launch.
+If you encounter any problems during usage of this integration check Troubleshooting section below.
 ## Local Installation
 
 ### Using Docker (Recommended)
@@ -94,6 +88,25 @@ yarn build
 This will automatically launch the application at `http://localhost:4000/admin`
 
 Selected storefront integration will be accessible under `http://localhost:3000`
+## Troubleshooting
+
+### 1. NextJS storefront doesn't start properly
+If the Storefront doesn't start you need to relaunch server manually.
+To do so you should navigate to `/integration` folder inside created project and type `yarn dev` into console.
+
+### 2. NextJS storefront stops during launch
+
+In case if the server is randomly stopping during launch it is advised to stop it (for example with `ctrl + c`) and repeat steps mentioned above.
+
+
+If you have encountered any other problem with NextJS you can also refer to NextJs docs: https://github.com/vercel/commerce
+
+
+
+
+
+
+
 
 ## Overview
 
