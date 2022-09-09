@@ -17,7 +17,7 @@ import { BuildScript, getBuildScript } from '../../domains/build';
 import { useVariables } from '../../domains/variables';
 import type Runner from '../../domains/module/Runner';
 import { notEmpty } from '../../domains/typescript';
-import existsDirectory from "../../domains/directory/existsDirectory";
+import existsDirectory from '../../domains/directory/existsDirectory';
 import { removeFileOrDirectory } from '../../domains/directory';
 
 export default class GenerateStore extends Command {
@@ -58,8 +58,8 @@ export default class GenerateStore extends Command {
     ].map((m) => ({ ...m, absolutePath: `${projectDir}/${m.path}` }));
 
     const mountGitRepository = async (dir: string, gitRepositoryURL: string) => {
-      if(await existsDirectory(dir)) {
-        await removeFileOrDirectory(dir)
+      if (await existsDirectory(dir)) {
+        await removeFileOrDirectory(dir);
       }
       await cloneGitRepository({ dir, gitRepositoryURL });
       await terminateGitRepository(projectDir);
