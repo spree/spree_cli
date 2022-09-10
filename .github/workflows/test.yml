@@ -33,7 +33,7 @@ jobs:
           cache: "yarn"
 
       - name: Install dependencies
-        run: cd ./cli && yarn install --frozen-lockfile && cd ..
+        run: yarn install --frozen-lockfile
 
       - name: Build CLI
         run: yarn build
