@@ -1,4 +1,4 @@
-import type { BuildScript } from 'cli/src/domains/build';
+import type { BuildScript } from '../../../src/domains/build';
 
 type Assert<A, B> = [B] extends [A] ? true : false;
 
