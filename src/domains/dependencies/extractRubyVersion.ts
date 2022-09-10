@@ -1,12 +1,9 @@
-const versionRegex = /^ruby (\d+\.\d+\.\d+)p.*$/;
+import extractVersionByRegExp from './extractVersionByRegExp';
+
+const versionRegExp = /^ruby (\d+\.\d+\.\d+)p.*$/;
 
 const extractRubyVersion = (output: string): string => {
-  const regexResult = output.match(versionRegex);
-
-  if (!regexResult || !regexResult[1]) {
-    throw new Error('Invalid output');
-  }
-  return regexResult[1];
+  return extractVersionByRegExp(output, versionRegExp);
 };
 
 export default extractRubyVersion;
