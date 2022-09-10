@@ -1,6 +1,17 @@
 {
-  "extends": "../tsconfig.base.json",
   "compilerOptions": {
+    "outDir": "./lib",
+    "esModuleInterop": true,
+    "target": "es5",
+    "moduleResolution": "node",
+    "importHelpers": true,
+    "sourceMap": true,
+    "declaration": true,
+    "skipLibCheck": true,
+    "baseUrl": "./",
+    "preserveSymlinks": true,
+    "allowJs": true,
+
     "lib": ["es2020"],
     "module": "commonjs",
     "resolveJsonModule": true,
@@ -22,7 +33,10 @@
     "noUnusedLocals": true,
     "noUnusedParameters": true
   },
-  "exclude": [],
+  "exclude": [
+    "node_modules",
+    "**/*.spec.ts"
+  ],
   "include": [
     "./src/**/*.ts",
     "./src/**/*.json",
