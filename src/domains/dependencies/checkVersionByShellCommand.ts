@@ -16,7 +16,7 @@ const checkVersionByShellCommand = async (command: string, versionString: string
     const versionCondition = parseVersionCondition(versionString);
     const compareResult = compareVersions(currentVersion, versionCondition.expectedVersion);
 
-    if (versionCondition.expectedComparisonResults.includes(compareResult) !== undefined) {
+    if (versionCondition.expectedComparisonResults.includes(compareResult) === true) {
       return {
         status: 'OK',
         versionRequired: versionString,
