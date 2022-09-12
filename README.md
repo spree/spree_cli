@@ -102,12 +102,6 @@ In case if the server is randomly stopping during launch it is advised to stop i
 If you have encountered any other problem with NextJS you can also refer to NextJs docs: https://github.com/vercel/commerce
 
 
-
-
-
-
-
-
 ## Overview
 
 This repository contains CLI to integrate spree and storefront of your choice

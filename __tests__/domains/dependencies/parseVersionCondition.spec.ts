@@ -41,6 +41,14 @@ describe('parseVersionCondition | unit tests', () => {
     expect(result.expectedComparisonResults).toEqual(expect.arrayContaining([1, 0]));
   });
 
+  it('parses inbeetwen version', () => {
+    const versionString = '>= 14.15 <= 14.19';
+
+    const result = parseVersionCondition(versionString);
+    expect(result.expectedVersion).toEqual(['14.15', '14.19']);
+    expect(result.expectedComparisonResults).toEqual(expect.arrayContaining([[0, 1],[-1, 0]]));
+  });
+
   it('uses equal as default version condition', () => {
     const versionString = '3.0.0';
 
@@ -58,7 +66,7 @@ describe('parseVersionCondition | unit tests', () => {
   });
 
   it('throws an error when version condition contains additional components', () => {
-    const versionString = '>= 3.0.0 test';
+    const versionString = '>= 3.0.0 test test test';
 
     expect(() => {
       parseVersionCondition(versionString);
