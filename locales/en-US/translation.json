@@ -19,7 +19,11 @@
         "build_scripts": "Getting the build scripts ready",
         "build_scripts_fetching": "Downloading \"{{ name }}\" build script",
         "build_scripts_fetching_done": "Build script for \"{{ name }}\" downloaded!",
-        "done": "done"
+        "done": "done",
+        "dependency_checking": "Checking {{ name }} {{ expectedVersion }}",
+        "dependency_not_found": "Could not find \"{{ name }}\" on your machine. Please install it before running Spree CLI",
+        "dependency_version_mismatch": "The configuration you chose requires \"{{ name }}\" \"{{ expectedVersion }}\", while vesion \"{{ currentVersion }}\" is currently installed. Please install the correct version before running Spree CLI",
+        "error": "ERROR"
       }
     },
     "generate_template": {

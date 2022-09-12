@@ -19,6 +19,7 @@ import type Runner from '../../domains/module/Runner';
 import { notEmpty } from '../../domains/typescript';
 import existsDirectory from '../../domains/directory/existsDirectory';
 import { removeFileOrDirectory } from '../../domains/directory';
+import checkDependency from '../../domains/dependencies/checkDependencies';
 
 export default class GenerateStore extends Command {
   static override description = t('command.generate_store.description');
@@ -66,6 +67,8 @@ export default class GenerateStore extends Command {
     };
 
     const repositoriesToMount: { name: string, fn?: () => Promise<void> }[] = [];
+
+    await this._validateDependencies(modules);
 
     for (const { absolutePath, template: { gitRepositoryURL, name }} of modules) {
       if (!gitRepositoryURL) continue;
@@ -123,5 +126,33 @@ export default class GenerateStore extends Command {
       .map((path) => runnersMap[path])
       .filter(notEmpty<Runner>)
       .forEach((runner) => executeRunner(runner));
+  }
+
+  async _validateDependencies(modules: Module[]) {
+    for (const module of modules) {
+      await this._validateDependenciesForModule(module);
+    }
+  }
+
+  async _validateDependenciesForModule(module: Module) {
+    const { template: { dependencies }} = module;
+    if (!dependencies) {
+      return;
+    }
+
+    for (const [name, versionString] of Object.entries(dependencies)) {
+      CliUx.ux.action.start(t('command.generate_store.message.dependency_checking', { name, expectedVersion: versionString}));
+      const result = await checkDependency(name, versionString);
+
+      if (result.status === 'OK') {
+        CliUx.ux.action.stop(color.green(t('command.generate_store.message.done')));
+      } else if (result.status === 'NOT_FOUND') {
+        CliUx.ux.action.stop(color.red(t('command.generate_store.message.error')));
+        this.error(t('command.generate_store.message.dependency_not_found', { name }));
+      } else if (result.status === 'VERSION_MISMATCH') {
+        CliUx.ux.action.stop(color.red(t('command.generate_store.message.error')));
+        this.error(t('command.generate_store.message.dependency_version_mismatch', { name, expectedVersion: versionString, currentVersion: result.versionFound}));
+      }
+    }
   }
 }

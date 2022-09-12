@@ -3,6 +3,7 @@ export interface Template {
   gitRepositoryURL?: string;
   documentationURL?: string;
   buildScriptURL?: string;
+  dependencies?: Record<string, string>;
 }
 
 export default Template;
