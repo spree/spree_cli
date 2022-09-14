@@ -18,14 +18,14 @@ const parseVersionCondition = (versionString: string): VersionCondition => {
 
   const components = normalizedVersionString.split(' ');
 
-  if (components.length === 0 || components.length > 2) {
+  if (components.length === 0 || components.length > 4) {
     throw new Error('Invalid version condition');
   } else if (components.length === 1) {
     return {
       expectedVersion: components[0] as string,
       expectedComparisonResults: [0]
     };
-  } else {
+  } else if (components.length === 2){
     const expectedComparisonResults = comparisonResultsMapping[components[0] as ComparisonOperator];
     if (!expectedComparisonResults) {
       throw new Error('Invalid version condition');
@@ -35,6 +35,16 @@ const parseVersionCondition = (versionString: string): VersionCondition => {
       expectedVersion: components[1] as string,
       expectedComparisonResults: expectedComparisonResults
     };
+  } else {
+    const expectedComparisonResults = [comparisonResultsMapping[components[0] as ComparisonOperator], comparisonResultsMapping[components[2] as ComparisonOperator]];
+    if (!expectedComparisonResults[0] || !expectedComparisonResults[1]) {
+      throw new Error('Invalid version condition');
+    }
+    return {
+      expectedVersion: [components[1] as string, components[3] as string],
+      expectedComparisonResults: expectedComparisonResults
+    }
+
   }
 };
 

@@ -11,7 +11,7 @@
       },
       "message": {
         "skipping": "Skipping process of generating the \"{{ name }}\"...",
-        "success": "Sucessfully generated your Spree starter at \"./{{ projectName }}\"!",
+        "success": "Successfully generated your Spree starter at \"./{{ projectName }}\"!",
         "configure": "Visit {{ documentationURL }} to learn how to configure the \"{{ name }}\".",
         "start": "Once finished, you can start the project using this command:",
         "start_command": "npm run dev",
@@ -22,7 +22,7 @@
         "done": "done",
         "dependency_checking": "Checking {{ name }} {{ expectedVersion }}",
         "dependency_not_found": "Could not find \"{{ name }}\" on your machine. Please install it before running Spree CLI",
-        "dependency_version_mismatch": "The configuration you chose requires \"{{ name }}\" \"{{ expectedVersion }}\", while vesion \"{{ currentVersion }}\" is currently installed. Please install the correct version before running Spree CLI",
+        "dependency_version_mismatch": "The configuration you chose requires \"{{ name }}\" \"{{ expectedVersion }}\", while version \"{{ currentVersion }}\" is currently installed. Please install the correct version before running Spree CLI",
         "error": "ERROR"
       }
     },

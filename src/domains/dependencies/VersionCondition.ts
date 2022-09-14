@@ -1,8 +1,8 @@
 import type ComparisonResult from './ComparisonResult';
 
 type VersionCondition = {
-  expectedVersion: string;
-  expectedComparisonResults: ComparisonResult[];
+  expectedVersion: string | string[];
+  expectedComparisonResults: ComparisonResult[] | ComparisonResult[][];
 };
 
 export default VersionCondition;
