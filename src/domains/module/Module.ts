@@ -6,5 +6,5 @@ export interface Module {
   template: Template;
   buildOptions?: Record<string, any>;
 }
-
+export type BootModule = Omit<Module, 'absolutePath'>;
 export default Module;

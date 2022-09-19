@@ -26,17 +26,12 @@
         "error": "ERROR"
       }
     },
-    "generate_template": {
-      "description": "Generates a template of your integration's for VSF",
-      "flag": {
-        "output": "A path where the template will be generated"
-      },
+    "boot_store": {
       "input": {
-        "project_name": "How would you like to name the output folder?",
-        "integration_path": "What's the path to the integration theme?"
+        "project_name": "Provide project name that you would like to be booted up"
       },
       "message": {
-        "success": "Sucessfully created your template at \"./{{ projectName }}\"!"
+        "failure": "No boot script detected for: [\"{{ module }}\"] \"{{ name }}\""
       }
     }
   },
