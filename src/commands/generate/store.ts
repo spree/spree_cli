@@ -58,11 +58,11 @@ export default class GenerateStore extends Command {
       }
     ].map((m) => ({ ...m, absolutePath: `${projectDir}/${m.path}` }));
 
-    const mountGitRepository = async (dir: string, gitRepositoryURL: string) => {
+    const mountGitRepository = async (dir: string, gitRepositoryURL: string, gitRef: string) => {
       if (await existsDirectory(dir)) {
         await removeFileOrDirectory(dir);
       }
-      await cloneGitRepository({ dir, gitRepositoryURL });
+      await cloneGitRepository({ dir, gitRepositoryURL, gitRef });
       await terminateGitRepository(projectDir);
     };
 
@@ -70,10 +70,11 @@ export default class GenerateStore extends Command {
 
     await this._validateDependencies(modules);
 
-    for (const { absolutePath, template: { gitRepositoryURL, name }} of modules) {
+    for (const { absolutePath, template: { gitRepositoryURL, name, gitRef }} of modules) {
       if (!gitRepositoryURL) continue;
+      const gitRefWithDefault = gitRef || 'main';
       const shouldCreateDirectory = await createDirectory(absolutePath);
-      const fn = shouldCreateDirectory ? (async () => await mountGitRepository(absolutePath, gitRepositoryURL)) : undefined;
+      const fn = shouldCreateDirectory ? (async () => await mountGitRepository(absolutePath, gitRepositoryURL, gitRefWithDefault)) : undefined;
       repositoriesToMount.push({ name, fn });
     }
 
@@ -118,7 +119,7 @@ export default class GenerateStore extends Command {
       if (buildScript) {
         spawn(buildScript, buildOptions);
       } else {
-        this.log(t('command.generate_store.message.build_scripts_skipping', { name }));
+        this.debug(t('command.generate_store.message.build_scripts_skipping', { name }));
       }
     };
 

@@ -1,12 +1,12 @@
 {
   "command": {
     "generate_store": {
-      "description": "Generates a Spree starter with integration and backend modules.",
+      "description": "Generates a Spree starter with storefront and backend modules.",
       "input": {
         "project_name": "What's your project name?",
-        "integration": "Choose an integration template:",
-        "spree": "Choose a spree template:",
-        "custom_integration_repository": "What's the URL of the custom integration's git repository?",
+        "integration": "Choose a storefront:",
+        "spree": "Choose a Spree setup:",
+        "custom_integration_repository": "What's the URL of the custom frontend git repository?",
         "overwrite": "\"./{{ dir }}\" already exists. Overwrite?"
       },
       "message": {
@@ -24,19 +24,6 @@
         "dependency_not_found": "Could not find \"{{ name }}\" on your machine. Please install it before running Spree CLI",
         "dependency_version_mismatch": "The configuration you chose requires \"{{ name }}\" \"{{ expectedVersion }}\", while version \"{{ currentVersion }}\" is currently installed. Please install the correct version before running Spree CLI",
         "error": "ERROR"
-      }
-    },
-    "generate_template": {
-      "description": "Generates a template of your integration's for VSF",
-      "flag": {
-        "output": "A path where the template will be generated"
-      },
-      "input": {
-        "project_name": "How would you like to name the output folder?",
-        "integration_path": "What's the path to the integration theme?"
-      },
-      "message": {
-        "success": "Sucessfully created your template at \"./{{ projectName }}\"!"
       }
     }
   },
