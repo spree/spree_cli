@@ -7,7 +7,7 @@ const createDirectory = async (dir: string): Promise<boolean> => {
     const { overwrite } = await inquirer.prompt<{ overwrite: boolean }>({
       type: 'confirm',
       name: 'overwrite',
-      message: () => t('command.generate_store.input.overwrite', { dir })
+      message: () => t('command.generate_new.input.overwrite', { dir })
     });
     return overwrite;
   }

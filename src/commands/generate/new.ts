@@ -21,8 +21,8 @@ import existsDirectory from '../../domains/directory/existsDirectory';
 import { removeFileOrDirectory } from '../../domains/directory';
 import checkDependency from '../../domains/dependencies/checkDependencies';
 
-export default class GenerateStore extends Command {
-  static override description = t('command.generate_store.description');
+export default class GenerateNew extends Command {
+  static override description = t('command.generate_new.description');
 
   static override examples = ['<%= config.bin %> <%= command.id %>'];
 
@@ -32,17 +32,17 @@ export default class GenerateStore extends Command {
 
   async run(): Promise<void> {
     const variables = await (async () => {
-      const projectName = await getProjectName(t('command.generate_store.input.project_name'));
+      const projectName = await getProjectName(t('command.generate_new.input.project_name'));
       return useVariables({ projectName });
     })();
 
     const projectDir = path.resolve(variables.projectName);
 
-    const spree = await getSpree({ message: t('command.generate_store.input.spree') });
+    const spree = await getSpree({ message: t('command.generate_new.input.spree') });
 
     const integration = await getIntegration({
-      message: t('command.generate_store.input.integration'),
-      customIntegrationRepositoryMessage: t('command.generate_store.input.custom_integration_repository')
+      message: t('command.generate_new.input.integration'),
+      customIntegrationRepositoryMessage: t('command.generate_new.input.custom_integration_repository')
     });
 
     const modules: Module[] = [
@@ -82,17 +82,17 @@ export default class GenerateStore extends Command {
       if (fn) {
         await fn();
       } else {
-        this.log(t('command.generate_store.message.skipping', { name }));
+        this.log(t('command.generate_new.message.skipping', { name }));
       }
     }
 
     this.log('');
-    this.log(t('command.generate_store.message.success', { projectName: variables.projectName }));
+    this.log(t('command.generate_new.message.success', { projectName: variables.projectName }));
     this.log('');
 
     const logModuleDocumentation = ({ template: { documentationURL, name }}: Module) => {
       if (!documentationURL) return;
-      this.log(t('command.generate_store.message.configure', { documentationURL, name }));
+      this.log(t('command.generate_new.message.configure', { documentationURL, name }));
       this.log('');
     };
     modules.forEach(logModuleDocumentation);
@@ -103,9 +103,9 @@ export default class GenerateStore extends Command {
       const buildScript = await getBuildScript(url);
       return preBuildScript.concat(buildScript);
     };
-    CliUx.ux.action.start(t('command.generate_store.message.build_scripts'));
+    CliUx.ux.action.start(t('command.generate_new.message.build_scripts'));
     const buildScripts = await Promise.all(modules.map(fetchBuildScript));
-    CliUx.ux.action.stop(color.green(t('command.generate_store.message.done')));
+    CliUx.ux.action.stop(color.green(t('command.generate_new.message.done')));
 
     const runnersMap = modules.reduce(
       (res, { path, buildOptions, template: { name }}, i) => ({
@@ -119,7 +119,7 @@ export default class GenerateStore extends Command {
       if (buildScript) {
         spawn(buildScript, buildOptions);
       } else {
-        this.debug(t('command.generate_store.message.build_scripts_skipping', { name }));
+        this.debug(t('command.generate_new.message.build_scripts_skipping', { name }));
       }
     };
 
@@ -142,17 +142,17 @@ export default class GenerateStore extends Command {
     }
 
     for (const [name, versionString] of Object.entries(dependencies)) {
-      CliUx.ux.action.start(t('command.generate_store.message.dependency_checking', { name, expectedVersion: versionString}));
+      CliUx.ux.action.start(t('command.generate_new.message.dependency_checking', { name, expectedVersion: versionString}));
       const result = await checkDependency(name, versionString);
 
       if (result.status === 'OK') {
-        CliUx.ux.action.stop(color.green(t('command.generate_store.message.done')));
+        CliUx.ux.action.stop(color.green(t('command.generate_new.message.done')));
       } else if (result.status === 'NOT_FOUND') {
-        CliUx.ux.action.stop(color.red(t('command.generate_store.message.error')));
-        this.error(t('command.generate_store.message.dependency_not_found', { name }));
+        CliUx.ux.action.stop(color.red(t('command.generate_new.message.error')));
+        this.error(t('command.generate_new.message.dependency_not_found', { name }));
       } else if (result.status === 'VERSION_MISMATCH') {
-        CliUx.ux.action.stop(color.red(t('command.generate_store.message.error')));
-        this.error(t('command.generate_store.message.dependency_version_mismatch', { name, expectedVersion: versionString, currentVersion: result.versionFound}));
+        CliUx.ux.action.stop(color.red(t('command.generate_new.message.error')));
+        this.error(t('command.generate_new.message.dependency_version_mismatch', { name, expectedVersion: versionString, currentVersion: result.versionFound}));
       }
     }
   }

@@ -8,10 +8,10 @@ It provides an interactive process for configuring Spree backend (running in Doc
 To get started, simply run the following command in your terminal:
 
 ```bash
-npx @spree/cli generate store
+npx @spree/cli generate new
 ```
 
-This will launch the interactive process that will guide you through the process of setting up a new Spree-based store. Happy hacking!
+This will launch the interactive process that will guide you through the process of setting up a new Spree-based application. Happy hacking!
 
 Note: Node 14+ is required to run the CLI. Depending on your configuration, the CLI will also prompt you to install additional dependencies required by your desired setup.
 
@@ -32,7 +32,7 @@ If you have encountered any other problem with NextJS you can also refer to Next
 
 ## Overview
 
-This repository contains CLI to integrate spree and storefront of your choice
+This repository contains CLI to integrate Spree and storefront of your choice
 
 This repository is being developed and maintained by [Upside](https://upsidelab.io)
 

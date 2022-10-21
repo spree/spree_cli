@@ -1,7 +1,7 @@
 {
   "command": {
-    "generate_store": {
-      "description": "Generates a Spree starter with storefront and backend modules.",
+    "generate_new": {
+      "description": "Generates a Spree project with storefront and backend modules.",
       "input": {
         "project_name": "What's your project name?",
         "integration": "Choose a storefront:",
