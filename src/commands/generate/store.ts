@@ -58,7 +58,14 @@ export default class GenerateStore extends Command {
         path: variables.pathIntegration,
         buildOptions: { stdio: 'inherit', shell: true }
       }
-    ].map((m) => ({ ...m, absolutePath: `${projectDir}/${m.path}` }));
+    ].map((m) => ({
+      ...m,
+      template: {
+        ...m.template,
+        runScriptPath: `run-${m.path}`
+      },
+      absolutePath: `${projectDir}/${m.path}`
+    }));
 
     const mountGitRepository = async (dir: string, gitRepositoryURL: string) => {
       if (await existsDirectory(dir)) {
@@ -128,7 +135,12 @@ export default class GenerateStore extends Command {
       })
     );
 
-    fs.writeFileSync(`${projectDir}/${variables.projectDetailsFileName}.json`, JSON.stringify(runModules));
+    fs.writeFileSync(`${projectDir}/${variables.projectDetailsFileName}.json`, JSON.stringify(runModules, null, 2));
+
+    for (const [runnerKey, runner] of Object.entries(runnersMap)) {
+      fs.writeFileSync(`${projectDir}/run-${runnerKey}`, runner.buildScript);
+    }
+
     const executeRunner = ({ buildScript, buildOptions, name }: Runner) => {
       if (buildScript) {
         spawn(buildScript, buildOptions);
@@ -136,7 +148,7 @@ export default class GenerateStore extends Command {
         this.log(t('command.generate_store.message.build_scripts_skipping', { name }));
       }
     };
-
+    
     [variables.pathBackend, variables.pathIntegration]
       .map((path) => runnersMap[path])
       .filter(notEmpty<Runner>)

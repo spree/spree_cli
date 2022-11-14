@@ -6,11 +6,8 @@ import { spawn } from 'child_process';
 
 import { getProjectName } from '../../domains/project-name';
 import { useVariables } from '../../domains/variables';
-import { notEmpty } from '../../domains/typescript';
-import type RunScript from '../../domains/run/RunScript';
 import type Runner from '../../domains/module/Runner';
 import type {BootModule} from '../../domains/module/Module';
-import { getRunScript } from '../../domains/run';
 import validateDependencies from '../../domains/dependencies/validate/validateDependencies';
 
 export default class BootStore extends Command {
@@ -33,21 +30,12 @@ export default class BootStore extends Command {
 
     await validateDependencies(modules);
 
-    const fetchRunScript = async (runScriptPath: string | undefined): Promise<RunScript | undefined> => {
-      if (!notEmpty<string>(runScriptPath)) return;
-      const runScript = await getRunScript(runScriptPath);
-      return runScript;
-    };
-
-    const runScripts = await Promise.all(modules.map(({ template: { runScriptPath } }) => fetchRunScript(runScriptPath)));
-
-    const runners: Runner[] = modules.map(({ path, buildOptions, template: { name} }, i: number) => ({
+    const runners: Runner[] = modules.map(({ path, buildOptions, template: { name, runScriptPath } }) => ({
       name: name,
       module: path,
       buildOptions: buildOptions,
-      buildScript: runScripts[i]
-    })
-    );
+      buildScript: fs.readFileSync(`${projectDir}/${runScriptPath}`, {encoding: 'utf8', flag: 'r'})
+    }));
 
     runners.forEach(({ name, module, buildOptions, buildScript }) => {
       if (buildScript) {
