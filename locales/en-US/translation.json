@@ -6,6 +6,7 @@
         "project_name": "What's your project name?",
         "integration": "Choose a storefront:",
         "spree": "Choose a Spree setup:",
+        "samples": "Do you want to load the samples?",
         "custom_integration_repository": "What's the URL of the custom frontend git repository?",
         "overwrite": "\"./{{ dir }}\" already exists. Overwrite?"
       },

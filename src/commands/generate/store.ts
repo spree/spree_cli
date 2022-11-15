@@ -2,6 +2,7 @@ import { Command, CliUx } from '@oclif/core';
 import color from '@oclif/color';
 import { t } from 'i18next';
 import * as path from 'path';
+import inquirer from 'inquirer';
 import { spawn } from 'child_process';
 
 import { getProjectName } from '../../domains/project-name';
@@ -38,7 +39,13 @@ export default class GenerateStore extends Command {
 
     const projectDir = path.resolve(variables.projectName);
 
-    const spree = await getSpree({ message: t('command.generate_store.input.spree') });
+    const { samples, ...spree } = await getSpree({ message: t('command.generate_store.input.spree') });
+
+    const { samples: withSamples } = await inquirer.prompt({
+      message: t('command.generate_store.input.samples') as string,
+      type: 'confirm',
+      name: 'samples'
+    });
 
     const integration = await getIntegration({
       message: t('command.generate_store.input.integration'),
@@ -47,7 +54,10 @@ export default class GenerateStore extends Command {
 
     const modules: Module[] = [
       {
-        template: spree,
+        template: withSamples && samples ? {
+          ...spree,
+          ...samples
+        } : { ...spree },
         path: variables.pathBackend,
         buildOptions: { encoding: 'utf-8', stdio: 'inherit', shell: true }
       },

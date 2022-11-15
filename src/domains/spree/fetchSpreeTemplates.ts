@@ -5,14 +5,19 @@ import { API_URL } from '../constants';
 
 const URL = `${API_URL}/spree/data.json`;
 
-type SpreeResponse = Omit<Spree, 'buildScriptURL'> & { buildScriptPath: string }
+type SpreeResponse = Omit<Spree, 'buildScriptURL'>
+  & { buildScriptPath: string }
+  & { samples: { buildScriptPath: string } }
 
 const fetchSpreeTemplates = async (): Promise<Spree[]> => {
   const response = await fetch(URL);
   const data = (await response.json()) as SpreeResponse[];
-  return data.map(({buildScriptPath, ...rest}) => ({
+  return data.map(({buildScriptPath, samples, ...rest}) => ({
     ...rest,
-    buildScriptURL: API_URL.concat(buildScriptPath)
+    buildScriptURL: API_URL.concat(buildScriptPath),
+    samples: {
+      buildScriptURL: API_URL.concat(samples.buildScriptPath),
+    }
   })) as Spree[];
 };
 
