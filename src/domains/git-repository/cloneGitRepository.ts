@@ -6,11 +6,12 @@ import http from 'isomorphic-git/http/node';
 type Options = {
   dir: string;
   gitRepositoryURL: string;
+  gitRef: string;
 };
 
 /** Clones git repository to the project directory displaying a progress bar. */
 const cloneGitRepository = async (options: Options): Promise<void> => {
-  const { dir, gitRepositoryURL } = options;
+  const { dir, gitRepositoryURL, gitRef } = options;
 
   const bar = CliUx.ux.progress({
     fps: 64,
@@ -26,6 +27,8 @@ const cloneGitRepository = async (options: Options): Promise<void> => {
     http,
     dir,
     url: gitRepositoryURL,
+    ref: gitRef,
+    singleBranch: true,
     onProgress(progress) {
       bar.update(progress.loaded);
 

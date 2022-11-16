@@ -1,4 +1,4 @@
-import extractVersionByRegExp from './extractVersionByRegExp';
+import extractVersionByRegExp from './../extractVersionByRegExp';
 
 const versionRegExp = /^v(\d+\.\d+\.\d+)$/;
 

@@ -3,6 +3,7 @@ import * as fs from 'fs';
 import color from '@oclif/color';
 import { t } from 'i18next';
 import * as path from 'path';
+import inquirer from 'inquirer';
 import { spawn } from 'child_process';
 
 import { getProjectName } from '../../domains/project-name';
@@ -40,7 +41,13 @@ export default class GenerateStore extends Command {
 
     const projectDir = path.resolve(variables.projectName);
 
-    const spree = await getSpree({ message: t('command.generate_store.input.spree') });
+    const { samples, ...spree } = await getSpree({ message: t('command.generate_store.input.spree') });
+
+    const { samples: withSamples } = await inquirer.prompt({
+      message: t('command.generate_store.input.samples') as string,
+      type: 'confirm',
+      name: 'samples'
+    });
 
     const integration = await getIntegration({
       message: t('command.generate_store.input.integration'),
@@ -49,7 +56,10 @@ export default class GenerateStore extends Command {
 
     const modules: Module[] = [
       {
-        template: spree,
+        template: withSamples && samples ? {
+          ...spree,
+          ...samples
+        } : { ...spree },
         path: variables.pathBackend,
         buildOptions: { encoding: 'utf-8', stdio: 'inherit', shell: true }
       },
@@ -67,11 +77,11 @@ export default class GenerateStore extends Command {
       absolutePath: `${projectDir}/${m.path}`
     }));
 
-    const mountGitRepository = async (dir: string, gitRepositoryURL: string) => {
+    const mountGitRepository = async (dir: string, gitRepositoryURL: string, gitRef: string) => {
       if (await existsDirectory(dir)) {
         await removeFileOrDirectory(dir);
       }
-      await cloneGitRepository({ dir, gitRepositoryURL });
+      await cloneGitRepository({ dir, gitRepositoryURL, gitRef });
       await terminateGitRepository(projectDir);
     };
 
@@ -79,10 +89,11 @@ export default class GenerateStore extends Command {
 
     await validateDependencies(modules);
 
-    for (const { absolutePath, template: { gitRepositoryURL, name }} of modules) {
+    for (const { absolutePath, template: { gitRepositoryURL, name, gitRef }} of modules) {
       if (!gitRepositoryURL) continue;
+      const gitRefWithDefault = gitRef || 'main';
       const shouldCreateDirectory = await createDirectory(absolutePath);
-      const fn = shouldCreateDirectory ? (async () => await mountGitRepository(absolutePath, gitRepositoryURL)) : undefined;
+      const fn = shouldCreateDirectory ? (async () => await mountGitRepository(absolutePath, gitRepositoryURL, gitRefWithDefault)) : undefined;
       repositoriesToMount.push({ name, fn });
     }
 
@@ -145,7 +156,7 @@ export default class GenerateStore extends Command {
       if (buildScript) {
         spawn(buildScript, buildOptions);
       } else {
-        this.log(t('command.generate_store.message.build_scripts_skipping', { name }));
+        this.debug(t('command.generate_store.message.build_scripts_skipping', { name }));
       }
     };
     

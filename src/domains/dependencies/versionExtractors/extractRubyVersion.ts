@@ -1,4 +1,4 @@
-import extractVersionByRegExp from './extractVersionByRegExp';
+import extractVersionByRegExp from './../extractVersionByRegExp';
 
 const versionRegExp = /^ruby (\d+\.\d+\.\d+)p.*$/;
 

@@ -30,19 +30,25 @@ const getIntegration = async (options: Options): Promise<Integration> => {
 
   const customIntegrations: CustomIntegration[] = [
     {
-      name: 'Custom integration',
+      name: 'Rails storefront',
+      buildIntegration: async ({ name }) => ({
+        name,
+        preSpreeBuildScript: 'echo "gem \'spree_frontend\'" >> $SPREE_CLI_PROJECT_NAME/$SPREE_CLI_PATH_BACKEND/Gemfile\n'
+      } as Integration)
+    },
+    {
+      name: 'No storefront (Spree Headless)',
+      buildIntegration: async () => ({
+        name: 'headless'
+      })
+    },
+    {
+      name: 'Custom storefront',
       buildIntegration: async (customIntegration) => ({
         ...customIntegration,
         gitRepositoryURL: await getGitRepositoryURL(customIntegrationRepositoryMessage)
       })
     },
-    {
-      name: 'Legacy integration',
-      buildIntegration: async ({ name }) => ({
-        name,
-        preSpreeBuildScript: 'echo "gem \'spree_frontend\'" >> $SPREE_CLI_PROJECT_NAME/$SPREE_CLI_PATH_BACKEND/Gemfile\n'
-      } as Integration)
-    }
   ];
 
   const choices = [...integrations, ...customIntegrations].map((integration) => ({

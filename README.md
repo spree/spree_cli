@@ -1,93 +1,21 @@
 # Spree CLI
 
-Spree's CLI that allows for setting up the store with selected backend template and front-end integration.
+Spree CLI is a tool that makes it easy to bootstrap a new Spree project.
+It provides an interactive process for configuring Spree backend (running in Dockerized, Hybrid or Native mode) and a selection of available frontends.
 
-## Getting started
-To use the CLI you need:
-* Node 14+
-* Requirements listed below, based on selected template
+## Usage
 
-### Using NextJS Storefront
-Using NextJS Storefront may be problematic - sometimes NextJS server is not launched properly or it stops during launch.
-If you encounter any problems during usage of this integration check Troubleshooting section below.
-## Local Installation
-
-### Using Docker (Recommended)
-#### 1. Install required tools and dependencies:
-
-Backend:
-* [Docker](https://www.docker.com/community-edition#/download)
-
-Frontend:
-   
-1. VueStorefront:
-   * Node 14.15.x - 14.19.x
-
-2. NextJs Storefront:
-   * Node
-   * Npm
-3. Legacy:
-#### 2. Before running script
-Build your CLI using:
-```bash
-yarn install
-yarn build
-```
-
-#### 3. Run setup script
+To get started, simply run the following command in your terminal:
 
 ```bash
-./bin/run generate store
+npx @spree/cli generate store
 ```
 
-This will automatically launch the application at `http://localhost:4000/admin`
+This will launch the interactive process that will guide you through the process of setting up a new Spree-based store. Happy hacking!
 
-Selected storefront integration will be accessible under `http://localhost:3000`
-
-### Without Docker (not recommended for beginners)
-
-#### 1. Install required tools and dependencies
-Backend:
-* HomeBrew - https://brew.sh/
-* Install required packages
+Note: Node 14+ is required to run the CLI. Depending on your configuration, the CLI will also prompt you to install additional dependencies required by your desired setup.
 
 
-      brew install gpg postgresql redis imagemagick
-      createuser -P -d postgres
-
-
-* RVM - https://rvm.io/
-* NVM - https://github.com/nvm-sh/nvm
-* Ruby - `rvm install 3.0.2`
-* Node - `nvm install`
-* Yarn - `npm -g install yarn`
-
-Frontend:
-
-1. VueStorefront:
-    * Node 14.15.x - 14.19.x
-
-2. NextJs Storefront:
-   * Node
-   * Npm
-3. Legacy:
-#### 2. Before running script
-Build your CLI using:
-
-```bash
-yarn install
-yarn build
-```
-
-#### 3. Run setup script
-
-```bash
-.bin/run generate store
-```
-
-This will automatically launch the application at `http://localhost:4000/admin`
-
-Selected storefront integration will be accessible under `http://localhost:3000`
 ## Troubleshooting
 
 ### 1. NextJS storefront doesn't start properly
