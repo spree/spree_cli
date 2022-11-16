@@ -5,6 +5,9 @@ export interface Template {
   documentationURL?: string;
   buildScriptURL?: string;
   dependencies?: Record<string, string>;
+  samples?: {
+    buildScriptURL?: string;
+  }
 }
 
 export default Template;
