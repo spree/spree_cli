@@ -16,6 +16,7 @@ import { getSpree } from '../../domains/spree';
 import { getIntegration } from '../../domains/integration';
 import type { Module } from '../../domains/module';
 import { BuildScript, getBuildScript } from '../../domains/build';
+import { getRunScript } from '../../domains/run';
 import { useVariables } from '../../domains/variables';
 import type Runner from '../../domains/module/Runner';
 import { notEmpty } from '../../domains/typescript';
@@ -23,6 +24,7 @@ import existsDirectory from '../../domains/directory/existsDirectory';
 import { removeFileOrDirectory } from '../../domains/directory';
 import type { BootModule } from '../../domains/module/Module';
 import validateDependencies from '../../domains/dependencies/validate/validateDependencies';
+import type RunScript from '../../domains/run/RunScript';
 
 export default class GenerateStore extends Command {
   static override description = t('command.generate_store.description');
@@ -72,7 +74,7 @@ export default class GenerateStore extends Command {
       ...m,
       template: {
         ...m.template,
-        runScriptPath: `run-${m.path}`
+        runScriptLocalPath: `run-${m.path}`
       },
       absolutePath: `${projectDir}/${m.path}`
     }));
@@ -126,21 +128,31 @@ export default class GenerateStore extends Command {
     const buildScripts = await Promise.all(modules.map(fetchBuildScript));
     CliUx.ux.action.stop(color.green(t('command.generate_store.message.done')));
 
+    const fetchRunScript = async ({ template: { runScriptURL: url }}: Module): Promise<RunScript | undefined> => {
+      if (!notEmpty<string>(url)) return;
+      const runScript = await getRunScript(url);
+      return runScript;
+    };
+    CliUx.ux.action.start(t('command.generate_store.message.run_scripts'));
+    const runScripts = await Promise.all(modules.map(fetchRunScript));
+    CliUx.ux.action.stop(color.green(t('command.generate_store.message.done')));
+
     const runnersMap = modules.reduce(
       (res, { path, buildOptions, template: { name }}, i) => ({
         ...res,
-        [path]: { name, buildOptions, buildScript: buildScripts[i] }
+        [path]: { name, buildOptions, buildScript: buildScripts[i], runScript: runScripts[i] }
       }),
       {} as Record<string, Runner>
     );
 
     const runModules: BootModule[] = modules.map(
-      ({ path, buildOptions, template: { name, runScriptPath, dependencies } }) => ({
+      ({ path, buildOptions, template: { name, runScriptPath, runScriptLocalPath, dependencies } }) => ({
         path: path,
         buildOptions: buildOptions,
         template: {
           name: name,
           runScriptPath: runScriptPath,
+          runScriptLocalPath: runScriptLocalPath,
           dependencies: dependencies
         }
       })
@@ -149,7 +161,7 @@ export default class GenerateStore extends Command {
     fs.writeFileSync(`${projectDir}/${variables.projectDetailsFileName}.json`, JSON.stringify(runModules, null, 2));
 
     for (const [runnerKey, runner] of Object.entries(runnersMap)) {
-      fs.writeFileSync(`${projectDir}/run-${runnerKey}`, runner.buildScript);
+      fs.writeFileSync(`${projectDir}/run-${runnerKey}`, runner.runScript);
     }
 
     const executeRunner = ({ buildScript, buildOptions, name }: Runner) => {

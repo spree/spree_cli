@@ -6,5 +6,6 @@ interface Runner {
   buildOptions: Module['buildOptions'];
   module?: string;
   buildScript?: BuildScript;
+  runScript?: string;
 }
 export default Runner;

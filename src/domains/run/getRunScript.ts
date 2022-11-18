@@ -1,11 +1,9 @@
 import fetch from 'node-fetch';
 
 import type RunScript from './RunScript';
-import { API_URL } from '../constants';
 
-const getRunScript = async (scriptPath: string): Promise<RunScript> => {
-  const URL = `${API_URL}${scriptPath}`;
-  const response = await fetch(URL, {
+const getRunScript = async (runScriptURL: string): Promise<RunScript> => {
+  const response = await fetch(runScriptURL, {
     headers: {
       'Content-Type': 'text/plain'
     }
