@@ -1,9 +1,9 @@
 import type CheckDependency from './../CheckDependency';
-import extractVipsVersion from './../versionExtractors/extractVipsVersion';
+import extractVersion from './../extractVersion';
 import checkVersionByShellCommand from './../checkVersionByShellCommand';
 
 const checkVipsVersion: CheckDependency = async (versionString: string) => {
-  return await checkVersionByShellCommand('vips --version', versionString, extractVipsVersion);
+  return await checkVersionByShellCommand('vips --version', versionString, extractVersion);
 };
 
 export default checkVipsVersion;

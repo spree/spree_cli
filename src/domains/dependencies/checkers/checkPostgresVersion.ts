@@ -1,9 +1,9 @@
 import type CheckDependency from './../CheckDependency';
-import extractPostgresVersion from './../versionExtractors/extractPostgresVersion';
+import extractVersion from './../extractVersion';
 import checkVersionByShellCommand from './../checkVersionByShellCommand';
 
 const checkPostgresVersion: CheckDependency = async (versionString: string) => {
-  return await checkVersionByShellCommand('psql --version', versionString, extractPostgresVersion);
+  return await checkVersionByShellCommand('psql --version', versionString, extractVersion);
 };
 
 export default checkPostgresVersion;
