@@ -22,6 +22,16 @@ Node 14+ is required to run the CLI. Depending on the chosen Spree setup, you wi
 - docker >= 20.0
 - docker-compose
 - ruby = 3.0.3
+- vips >= 8.6
+- redis (only needed for running rspec tests)
+
+### Vue Storefront
+- node >= 14.15 <= 14.19
+- yarn
+
+### Next.js Commerce
+- node >= 13.0
+- yarn
 
 ## Usage
 
