@@ -1,18 +1,19 @@
 import { promisify } from 'util';
 import { exec } from 'child_process';
 import parseVersionCondition from './parseVersionCondition';
+import extractVersion from './extractVersion';
 import compareVersions from './compareVersions';
 import type DependencyCheckResult from './VersionCheckResult';
 import type ComparisonResult from './ComparisonResult';
 
 const execute = promisify(exec);
 
-const checkVersionByShellCommand = async (command: string, versionString: string, extractVersionFn: (output: string) => string): Promise<DependencyCheckResult> => {
+const checkVersionByShellCommand = async (command: string, versionString: string): Promise<DependencyCheckResult> => {
   try {
     const result = await execute(command);
     const output = result.stdout;
 
-    const currentVersion = extractVersionFn(output);
+    const currentVersion = extractVersion(output);
     let compareResult
     const versionCondition = parseVersionCondition(versionString);
     if (Array.isArray(versionCondition.expectedVersion)) {
