@@ -1,4 +1,5 @@
 import { Command, CliUx } from '@oclif/core';
+import * as fs from 'fs';
 import color from '@oclif/color';
 import { t } from 'i18next';
 import * as path from 'path';
@@ -15,12 +16,15 @@ import { getSpree } from '../../domains/spree';
 import { getIntegration } from '../../domains/integration';
 import type { Module } from '../../domains/module';
 import { BuildScript, getBuildScript } from '../../domains/build';
+import { getRunScript } from '../../domains/run';
 import { useVariables } from '../../domains/variables';
 import type Runner from '../../domains/module/Runner';
 import { notEmpty } from '../../domains/typescript';
 import existsDirectory from '../../domains/directory/existsDirectory';
 import { removeFileOrDirectory } from '../../domains/directory';
-import checkDependency from '../../domains/dependencies/checkDependencies';
+import type { BootModule } from '../../domains/module/Module';
+import validateDependencies from '../../domains/dependencies/validate/validateDependencies';
+import type RunScript from '../../domains/run/RunScript';
 
 export default class GenerateStore extends Command {
   static override description = t('command.generate_store.description');
@@ -66,7 +70,14 @@ export default class GenerateStore extends Command {
         path: variables.pathIntegration,
         buildOptions: { stdio: 'inherit', shell: true }
       }
-    ].map((m) => ({ ...m, absolutePath: `${projectDir}/${m.path}` }));
+    ].map((m) => ({
+      ...m,
+      template: {
+        ...m.template,
+        runScriptLocalPath: m.template.runScriptURL ? `run-${m.path}` : undefined
+      },
+      absolutePath: `${projectDir}/${m.path}`
+    }));
 
     const mountGitRepository = async (dir: string, gitRepositoryURL: string, gitRef: string) => {
       if (await existsDirectory(dir)) {
@@ -78,7 +89,7 @@ export default class GenerateStore extends Command {
 
     const repositoriesToMount: { name: string, fn?: () => Promise<void> }[] = [];
 
-    await this._validateDependencies(modules);
+    await validateDependencies(modules);
 
     for (const { absolutePath, template: { gitRepositoryURL, name, gitRef }} of modules) {
       if (!gitRepositoryURL) continue;
@@ -117,13 +128,41 @@ export default class GenerateStore extends Command {
     const buildScripts = await Promise.all(modules.map(fetchBuildScript));
     CliUx.ux.action.stop(color.green(t('command.generate_store.message.done')));
 
+    const fetchRunScript = async ({ template: { runScriptURL: url }}: Module): Promise<RunScript | undefined> => {
+      if (!notEmpty<string>(url)) return;
+      const runScript = await getRunScript(url);
+      return runScript;
+    };
+    CliUx.ux.action.start(t('command.generate_store.message.run_scripts'));
+    const runScripts = await Promise.all(modules.map(fetchRunScript));
+    CliUx.ux.action.stop(color.green(t('command.generate_store.message.done')));
+
     const runnersMap = modules.reduce(
       (res, { path, buildOptions, template: { name }}, i) => ({
         ...res,
-        [path]: { name, buildOptions, buildScript: buildScripts[i] }
+        [path]: { name, buildOptions, buildScript: buildScripts[i], runScript: runScripts[i] }
       }),
       {} as Record<string, Runner>
     );
+
+    const runModules: BootModule[] = modules.map(
+      ({ path, buildOptions, template: { name, runScriptPath, runScriptLocalPath, dependencies } }) => ({
+        path: path,
+        buildOptions: buildOptions,
+        template: {
+          name: name,
+          runScriptPath: runScriptPath,
+          runScriptLocalPath: runScriptLocalPath,
+          dependencies: dependencies
+        }
+      })
+    );
+
+    fs.writeFileSync(`${projectDir}/${variables.projectDetailsFileName}.json`, JSON.stringify(runModules, null, 2));
+
+    for (const [runnerKey, runner] of Object.entries(runnersMap)) {
+      if (runner.runScript) fs.writeFileSync(`${projectDir}/run-${runnerKey}`, runner.runScript);
+    }
 
     const executeRunner = ({ buildScript, buildOptions, name }: Runner) => {
       if (buildScript) {
@@ -132,38 +171,10 @@ export default class GenerateStore extends Command {
         this.debug(t('command.generate_store.message.build_scripts_skipping', { name }));
       }
     };
-
+    
     [variables.pathBackend, variables.pathIntegration]
       .map((path) => runnersMap[path])
       .filter(notEmpty<Runner>)
       .forEach((runner) => executeRunner(runner));
-  }
-
-  async _validateDependencies(modules: Module[]) {
-    for (const module of modules) {
-      await this._validateDependenciesForModule(module);
-    }
-  }
-
-  async _validateDependenciesForModule(module: Module) {
-    const { template: { dependencies }} = module;
-    if (!dependencies) {
-      return;
-    }
-
-    for (const [name, versionString] of Object.entries(dependencies)) {
-      CliUx.ux.action.start(t('command.generate_store.message.dependency_checking', { name, expectedVersion: versionString}));
-      const result = await checkDependency(name, versionString);
-
-      if (result.status === 'OK') {
-        CliUx.ux.action.stop(color.green(t('command.generate_store.message.done')));
-      } else if (result.status === 'NOT_FOUND') {
-        CliUx.ux.action.stop(color.red(t('command.generate_store.message.error')));
-        this.error(t('command.generate_store.message.dependency_not_found', { name }));
-      } else if (result.status === 'VERSION_MISMATCH') {
-        CliUx.ux.action.stop(color.red(t('command.generate_store.message.error')));
-        this.error(t('command.generate_store.message.dependency_version_mismatch', { name, expectedVersion: versionString, currentVersion: result.versionFound}));
-      }
-    }
   }
 }
