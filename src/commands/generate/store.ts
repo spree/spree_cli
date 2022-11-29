@@ -74,7 +74,7 @@ export default class GenerateStore extends Command {
       ...m,
       template: {
         ...m.template,
-        runScriptLocalPath: `run-${m.path}`
+        runScriptLocalPath: m.template.runScriptURL ? `run-${m.path}` : undefined
       },
       absolutePath: `${projectDir}/${m.path}`
     }));
@@ -161,7 +161,7 @@ export default class GenerateStore extends Command {
     fs.writeFileSync(`${projectDir}/${variables.projectDetailsFileName}.json`, JSON.stringify(runModules, null, 2));
 
     for (const [runnerKey, runner] of Object.entries(runnersMap)) {
-      fs.writeFileSync(`${projectDir}/run-${runnerKey}`, runner.runScript);
+      if (runner.runScript) fs.writeFileSync(`${projectDir}/run-${runnerKey}`, runner.runScript);
     }
 
     const executeRunner = ({ buildScript, buildOptions, name }: Runner) => {

@@ -28,7 +28,9 @@ export default class BootStore extends Command {
 
     await validateDependencies(modules);
 
-    const runners: Runner[] = modules.map(({ path, buildOptions, template: { name, runScriptLocalPath } }) => ({
+    const runners: Runner[] = modules
+    .filter(({ template: { runScriptLocalPath } }) => !!runScriptLocalPath)
+    .map(({ path, buildOptions, template: { name, runScriptLocalPath } }) => ({
       name: name,
       module: path,
       buildOptions: buildOptions,
