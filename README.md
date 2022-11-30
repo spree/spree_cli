@@ -38,10 +38,16 @@ Node 14+ is required to run the CLI. Depending on the chosen Spree setup, you wi
 To get started, simply run the following command in your terminal:
 
 ```bash
-npx @spree/cli generate store
+npx @spree/cli new app
 ```
 
-This will launch the interactive process that will guide you through the process of setting up a new Spree-based store. Happy hacking!
+This will launch the interactive process that will guide you through the process of setting up a new Spree-based store.
+
+In order to start the already generated app, navigate to your project's folder and run the following command:
+```bash
+npx @spree/cli start app
+```
+Happy hacking!
 
 ## Troubleshooting
 
