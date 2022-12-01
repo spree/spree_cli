@@ -65,7 +65,7 @@ If you have encountered any other problem with NextJS you can also refer to Next
 
 ## Overview
 
-This repository contains CLI to integrate spree and storefront of your choice
+This repository contains CLI to integrate Spree and storefront of your choice
 
 This repository is being developed and maintained by [Upside](https://upsidelab.io)
 
