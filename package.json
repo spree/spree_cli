@@ -1,6 +1,6 @@
 {
   "name": "@spree/cli",
-  "version": "0.2.0",
+  "version": "1.0.0",
   "description": "Spree's CLI that allows for setting up the store with selected backend template and front-end integration",
   "bin": "./bin/run",
   "homepage": "https://github.com/upsidelab/spree_cli_internal",
