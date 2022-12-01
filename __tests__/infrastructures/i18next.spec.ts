@@ -36,7 +36,7 @@ describe('infrastructures/i18next | integration tests', () => {
 
     await setupI18Next();
 
-    const text = t('command.generate_store.description');
+    const text = t('command.new_app.description');
 
     expect(text).toBe('Generates a Spree starter with integration and backend modules.');
   });

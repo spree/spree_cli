@@ -1,7 +1,7 @@
 {
   "command": {
-    "generate_store": {
-      "description": "Generates a Spree starter with storefront and backend modules.",
+    "new_app": {
+      "description": "Generates a Spree project with storefront and backend modules.",
       "input": {
         "project_name": "What's your project name?",
         "integration": "Choose a storefront:",
@@ -28,10 +28,8 @@
         "error": "ERROR"
       }
     },
-    "boot_store": {
-      "input": {
-        "project_name": "Provide project name that you would like to be booted up"
-      },
+    "start_app": {
+      "description": "Starts up an already generated project.",
       "message": {
         "failure": "No boot script detected for: [\"{{ module }}\"] \"{{ name }}\""
       }

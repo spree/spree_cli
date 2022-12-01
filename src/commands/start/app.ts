@@ -9,8 +9,8 @@ import type Runner from '../../domains/module/Runner';
 import type {BootModule} from '../../domains/module/Module';
 import validateDependencies from '../../domains/dependencies/validate/validateDependencies';
 
-export default class BootStore extends Command {
-  static override description = t('command.generate_store.description');
+export default class StartApp extends Command {
+  static override description = t('command.start_app.description');
 
   static override examples = ['<%= config.bin %> <%= command.id %>'];
 
@@ -41,7 +41,7 @@ export default class BootStore extends Command {
       if (runScript) {
         spawn(runScript, buildOptions);
       } else {
-        this.log(t('command.boot_store.message.failure', { module, name }));
+        this.log(t('command.start_app.message.failure', { module, name }));
       }
     });
   }
