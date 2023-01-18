@@ -12,7 +12,7 @@ Node 14+ is required to run the CLI. Depending on the chosen Spree setup, you wi
 - docker-compose
 
 ### Spree (no docker)
-- ruby = 3.0.3
+- ruby = 3.2.0
 - vips >= 8.6
 - gpg
 - psql
@@ -21,7 +21,7 @@ Node 14+ is required to run the CLI. Depending on the chosen Spree setup, you wi
 ### Spree (hybrid)
 - docker >= 20.0
 - docker-compose
-- ruby = 3.0.3
+- ruby = 3.2.0
 - vips >= 8.6
 - redis (only needed for running rspec tests)
 
