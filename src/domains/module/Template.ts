@@ -8,6 +8,7 @@ export interface Template {
   runScriptURL?: string;
   runScriptLocalPath?: string;
   dependencies?: Record<string, string>;
+  beta?: boolean;
   samples?: {
     buildScriptURL?: string;
   }

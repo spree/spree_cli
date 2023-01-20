@@ -1,4 +1,4 @@
-import { Command, CliUx } from '@oclif/core';
+import { Command, CliUx, Flags } from '@oclif/core';
 import * as fs from 'fs';
 import color from '@oclif/color';
 import { t } from 'i18next';
@@ -31,11 +31,16 @@ export default class NewApp extends Command {
 
   static override examples = ['<%= config.bin %> <%= command.id %>'];
 
-  static override flags = {};
+  static override flags = {
+    beta: Flags.boolean({
+      description: t('command.new_app.flag.beta')
+    })
+  };
 
   static override args = [];
 
   async run(): Promise<void> {
+    const { flags } = await this.parse(NewApp);
     const variables = await (async () => {
       const projectName = await getProjectName(t('command.new_app.input.project_name'));
       return useVariables({ projectName });
@@ -43,7 +48,7 @@ export default class NewApp extends Command {
 
     const projectDir = path.resolve(variables.projectName);
 
-    const { samples, ...spree } = await getSpree({ message: t('command.new_app.input.spree') });
+    const { samples, ...spree } = await getSpree({ message: t('command.new_app.input.spree'), includeBeta: flags.beta });
 
     const { samples: withSamples } = await inquirer.prompt({
       message: t('command.new_app.input.samples') as string,
@@ -171,7 +176,7 @@ export default class NewApp extends Command {
         this.debug(t('command.new_app.message.build_scripts_skipping', { name }));
       }
     };
-    
+
     [variables.pathBackend, variables.pathIntegration]
       .map((path) => runnersMap[path])
       .filter(notEmpty<Runner>)
