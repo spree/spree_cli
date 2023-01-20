@@ -8,15 +8,18 @@ type Answers = {
 
 type Options = {
   message: string;
+  includeBeta: boolean;
 };
 
 /** Gets the integration from user's input. */
 const getSpree = async (options: Options): Promise<Spree> => {
-  const { message } = options;
+  const { message, includeBeta } = options;
 
   const spreeTemplates = await fetchSpreeTemplates();
 
-  const choices = spreeTemplates.map((spree) => ({
+  const filteredTemplates = includeBeta ? spreeTemplates : spreeTemplates.filter((e) => e.beta !== true);
+
+  const choices = filteredTemplates.map((spree) => ({
     name: spree.name,
     value: spree
   }));

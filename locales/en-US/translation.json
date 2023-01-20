@@ -2,6 +2,9 @@
   "command": {
     "new_app": {
       "description": "Generates a Spree project with storefront and backend modules.",
+      "flag": {
+        "beta": "Includes configurations that are currently in beta"
+      },
       "input": {
         "project_name": "What's your project name?",
         "integration": "Choose a storefront:",
