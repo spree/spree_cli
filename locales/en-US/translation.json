@@ -50,6 +50,9 @@
       "is_invalid": "Please input a valid git repository URL.",
       "was_not_found": "Couldn't locate git repository with the received URL.",
       "suggestion": "The protocol isn't supported. Use \"{{ suggestion }}\" instead?"
+    },
+    "spree": {
+      "recommended": "Recommended"
     }
   }
 }

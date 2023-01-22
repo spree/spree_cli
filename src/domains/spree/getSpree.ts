@@ -1,34 +1,19 @@
 import inquirer from 'inquirer';
 import type { Spree } from '.';
-import { fetchSpreeTemplates } from '.';
+import { fetchSpreeTemplates, buildSpreeChoices } from '.';
+import type { Options } from '.';
 
 type Answers = {
   spree: Spree;
 };
 
-type Options = {
-  message: string;
-  includeBeta: boolean;
-};
-
-const filterTemplates = (templates: Spree[], options: Options) => {
-  if (options.includeBeta) return templates;
-
-  return templates.filter((e) => !e.beta);
-}
-
 /** Gets the integration from user's input. */
 const getSpree = async (options: Options): Promise<Spree> => {
   const { message } = options;
 
-  const spreeTemplates = await fetchSpreeTemplates();
+  const templates = await fetchSpreeTemplates();
 
-  const filteredTemplates = filterTemplates(spreeTemplates, options);
-
-  const choices = filteredTemplates.map((spree) => ({
-    name: spree.name,
-    value: spree
-  }));
+  const choices = buildSpreeChoices(templates, options);
 
   const answers = await inquirer.prompt<Answers>({
     choices,
