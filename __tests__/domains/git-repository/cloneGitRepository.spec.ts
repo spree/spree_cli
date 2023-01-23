@@ -20,12 +20,14 @@ describe('cloneGitRepository | unit tests', () => {
     const dir = '~/Projects/test-store';
 
     const gitRepositoryURL = 'https://github.com/upsidelab/test-template.git';
+    const gitRef = 'main';
 
     jest.spyOn(git, 'clone').mockResolvedValueOnce();
 
     await cloneGitRepository({
       dir,
-      gitRepositoryURL
+      gitRepositoryURL,
+      gitRef
     });
 
     expect(git.clone).toHaveBeenCalledWith(
@@ -57,7 +59,8 @@ describe('cloneGitRepository | unit tests', () => {
 
     await cloneGitRepository({
       dir: '~/Projects/test-store',
-      gitRepositoryURL: 'https://github.com/upsidelab/test-template.git'
+      gitRepositoryURL: 'https://github.com/upsidelab/test-template.git',
+      gitRef: 'main'
     });
 
     expect(output).toContain('Cloning https://github.com/upsidelab/test-template.git | ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ | 0%');

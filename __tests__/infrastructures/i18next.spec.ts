@@ -38,6 +38,6 @@ describe('infrastructures/i18next | integration tests', () => {
 
     const text = t('command.new_app.description');
 
-    expect(text).toBe('Generates a Spree starter with integration and backend modules.');
+    expect(text).toBe('Generates a Spree project with storefront and backend modules.');
   });
 });
