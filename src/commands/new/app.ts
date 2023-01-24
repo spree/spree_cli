@@ -1,5 +1,6 @@
 import { Command, CliUx, Flags } from '@oclif/core';
 import * as fs from 'fs';
+import os from 'os';
 import color from '@oclif/color';
 import { t } from 'i18next';
 import * as path from 'path';
@@ -48,7 +49,11 @@ export default class NewApp extends Command {
 
     const projectDir = path.resolve(variables.projectName);
 
-    const { samples, ...spree } = await getSpree({ message: t('command.new_app.input.spree'), includeBeta: flags.beta });
+    const { samples, ...spree } = await getSpree({
+      message: t('command.new_app.input.spree'),
+      includeBeta: flags.beta,
+      platform: os.platform()
+    });
 
     const { samples: withSamples } = await inquirer.prompt({
       message: t('command.new_app.input.samples') as string,

@@ -9,6 +9,7 @@ export interface Template {
   runScriptLocalPath?: string;
   dependencies?: Record<string, string>;
   beta?: boolean;
+  recommendedForPlatforms?: string[];
   samples?: {
     buildScriptURL?: string;
   }
