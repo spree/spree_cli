@@ -29,13 +29,13 @@ export default class StartApp extends Command {
     await validateDependencies(modules);
 
     const runners: Runner[] = modules
-    .filter(({ template: { runScriptLocalPath } }) => !!runScriptLocalPath)
-    .map(({ path, buildOptions, template: { name, runScriptLocalPath } }) => ({
-      name: name,
-      module: path,
-      buildOptions: buildOptions,
-      runScript: fs.readFileSync(`${projectDir}/${runScriptLocalPath}`, {encoding: 'utf8', flag: 'r'})
-    }));
+      .filter(({ template: { runScriptLocalPath } }) => Boolean(runScriptLocalPath))
+      .map(({ path, buildOptions, template: { name, runScriptLocalPath } }) => ({
+        name: name,
+        module: path,
+        buildOptions: buildOptions,
+        runScript: fs.readFileSync(`${projectDir}/${runScriptLocalPath}`, {encoding: 'utf8', flag: 'r'})
+      }));
 
     runners.forEach(({ name, module, buildOptions, runScript }) => {
       if (runScript) {

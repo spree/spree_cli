@@ -22,7 +22,7 @@ describe('buildSpreeChoices | unit tests', () => {
   ];
 
   beforeAll(async () => {
-    await setupI18Next()
+    await setupI18Next();
   });
 
   it('prioritizes hybrid template when platform is darwin', () => {
@@ -61,5 +61,5 @@ describe('buildSpreeChoices | unit tests', () => {
     expect(result).toHaveLength(2);
     expect((result[0] as SpreeChoice).name).toEqual('Spree 4.5 Hybrid (Recommended)');
     expect((result[1] as SpreeChoice).name).toEqual('Spree 4.5 Dockerized');
-  })
+  });
 });

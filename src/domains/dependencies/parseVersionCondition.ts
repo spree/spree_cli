@@ -25,7 +25,7 @@ const parseVersionCondition = (versionString: string): VersionCondition => {
       expectedVersion: components[0] as string,
       expectedComparisonResults: [0]
     };
-  } else if (components.length === 2){
+  } else if (components.length === 2) {
     const expectedComparisonResults = comparisonResultsMapping[components[0] as ComparisonOperator];
     if (!expectedComparisonResults) {
       throw new Error('Invalid version condition');
@@ -43,7 +43,7 @@ const parseVersionCondition = (versionString: string): VersionCondition => {
     return {
       expectedVersion: [components[1] as string, components[3] as string],
       expectedComparisonResults: expectedComparisonResults
-    }
+    };
 
   }
 };
