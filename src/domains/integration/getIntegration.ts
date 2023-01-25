@@ -48,7 +48,7 @@ const getIntegration = async (options: Options): Promise<Integration> => {
         ...customIntegration,
         gitRepositoryURL: await getGitRepositoryURL(customIntegrationRepositoryMessage)
       })
-    },
+    }
   ];
 
   const choices = [...integrations, ...customIntegrations].map((integration) => ({

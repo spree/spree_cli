@@ -17,7 +17,7 @@ const fetchSpreeTemplates = async (): Promise<Spree[]> => {
     buildScriptURL: API_URL.concat(buildScriptPath),
     runScriptURL: API_URL.concat(runScriptPath),
     samples: {
-      buildScriptURL: API_URL.concat(samples.buildScriptPath),
+      buildScriptURL: API_URL.concat(samples.buildScriptPath)
     }
   })) as Spree[];
 };

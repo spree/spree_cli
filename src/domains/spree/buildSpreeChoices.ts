@@ -1,8 +1,7 @@
 import { t } from 'i18next';
 import type { UserOptions, Spree, SpreeChoice } from '.';
 
-
-const filterTemplates = (templates: Spree[], includeBeta: Boolean) => {
+const filterTemplates = (templates: Spree[], includeBeta: boolean) => {
   if (includeBeta) return templates;
 
   return templates.filter((e) => !e.beta);

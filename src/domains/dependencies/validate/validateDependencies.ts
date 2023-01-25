@@ -25,7 +25,7 @@ const validateDependenciesForModule = async (module: Module | BootModule) => {
   }
 };
 
-const validateDependencies = async (modules: Module[] | BootModule[] ) => {
+const validateDependencies = async (modules: Module[] | BootModule[]) => {
   for (const module of modules) {
     await validateDependenciesForModule(module);
   }
