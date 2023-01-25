@@ -6,7 +6,7 @@ type SupportedDependency = 'ruby' | 'docker' | 'vips' | 'gpg' | 'psql' | 'redis'
 const dependencyMapping: Record<SupportedDependency, string> = {
   ruby: 'ruby --version',
   docker: 'docker --version',
-  'docker-compose': 'docker-compose --version',
+  'docker-compose': 'docker compose version',
   vips: 'vips --version',
   gpg: 'gpg --version',
   psql: 'psql --version',
